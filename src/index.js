@@ -1,4 +1,5 @@
 import './styles/main.scss';
+import 'bootstrap';
 
 import {Header} from './app/header';
 
