@@ -1,11 +1,8 @@
 import './styles/main.scss';
 import 'bootstrap';
 
-import {Header} from './app/header';
+import {TestController} from './app/controllers/TestController';
+import {TestModel} from './app/models/TestModel';
+import {TestView} from './app/views/TestView';
 
-let header = new Header();
-(async () => {
-    const resp = await fetch('https://jsonplaceholder.typicode.com/posts');
-    console.log(await resp.json());
-    console.log(await header.getFirstHeading());
-})();
+new TestController(new TestModel(), new TestView());

@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
+// see https://hackernoon.com/lets-start-with-webpack-4-91a0f1dba02e
 module.exports = {
     entry: './src/index.js',
     devtool: 'source-map',
@@ -17,7 +18,7 @@ module.exports = {
                 test: [/.js$/],
                 exclude: /(node_modules)/,
                 include: path.resolve(__dirname, 'src'),
-                use: ["babel-loader", "eslint-loader"]
+                use: ['babel-loader', 'eslint-loader']
             },
             {
                 test: [/.css$|.scss$/],
