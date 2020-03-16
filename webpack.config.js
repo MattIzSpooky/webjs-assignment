@@ -16,12 +16,12 @@ module.exports = {
             {
                 test: [/.js$/],
                 exclude: /(node_modules)/,
-                use: {
-                    loader: 'babel-loader'
-                }
+                include: path.resolve(__dirname, 'src'),
+                use: ["babel-loader", "eslint-loader"]
             },
             {
                 test: [/.css$|.scss$/],
+                include: path.resolve(__dirname, 'src/styles'),
                 use: [
                     MiniCssExtractPlugin.loader,
                     'css-loader',
