@@ -1,0 +1,15 @@
+.square {
+  height: 50px;
+  width: 50px;
+  background-color: teal;
+
+  border: 2px solid black;
+
+  text-align: center;
+
+  margin: calc(1rem / 2);
+
+  &-obstruction {
+    background-color: red;
+  }
+}

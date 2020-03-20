@@ -1,8 +1,2 @@
-$color: tan;
-
-h3 {
-  background-color: $color;
-  user-select: none;
-}
-
+@import "square";
 @import '~bootstrap/scss/bootstrap';

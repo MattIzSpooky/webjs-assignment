@@ -1,8 +1,6 @@
 import './styles/main.scss';
 import 'bootstrap';
 
-import {TestController} from './app/controllers/TestController';
-import {TestModel} from './app/models/TestModel';
-import {TestView} from './app/views/TestView';
+import {RegionController} from './app/controllers/RegionController';
 
-new TestController(new TestModel(), new TestView());
+new RegionController();
