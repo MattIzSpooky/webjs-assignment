@@ -4,7 +4,7 @@ import {Square} from './Square';
 export class Region extends Storable {
     #squares = [];
 
-    static AMOUNT_OF_ROWS = 15; // Should be 15.
+    static AMOUNT_OF_ROWS = 15;
 
     getSquares() {
         return this.#squares.sort((a, b) => a.getX() - b.getX());

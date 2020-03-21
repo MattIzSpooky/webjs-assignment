@@ -6,12 +6,14 @@ export class RegionView extends BaseView {
 
     #onDragHandler;
     #onDropHandler;
+    #onClickHandler;
 
-    constructor(rowAmount, onDragHandler, onDropHandler) {
+    constructor(rowAmount, onDragHandler, onDropHandler, onClickHandler) {
         super();
         this.#rowAmount = rowAmount;
         this.#onDragHandler = onDragHandler;
         this.#onDropHandler = onDropHandler;
+        this.#onClickHandler = onClickHandler;
 
         const app = this.getElement('#app');
         this.$root = this.createElement('div');
@@ -53,6 +55,7 @@ export class RegionView extends BaseView {
             $square.draggable = true;
             $square.ondragstart = this.#onDragHandler;
             $square.ondrop = this.#onDropHandler;
+            $square.onclick = this.#onClickHandler;
             $square.ondragover = (ev) => ev.preventDefault();
         }
     }

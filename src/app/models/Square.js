@@ -11,24 +11,8 @@ export class Square {
         return this.#x;
     }
 
-    setX(x) {
-        if (isNaN(x)) {
-            throw new Error(`x: ${x} is not a number`);
-        }
-
-        this.#x = x;
-    }
-
     getY() {
         return this.#y;
-    }
-
-    setY(y) {
-        if (isNaN(y)) {
-            throw new Error(`y: ${y} is not a number`);
-        }
-
-        this.#y = y;
     }
 
     // TODO: remove this temp thingy.
