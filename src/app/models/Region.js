@@ -3,6 +3,7 @@ import {Square} from './Square';
 
 export class Region extends Storable {
     #squares = [];
+    #name;
 
     static AMOUNT_OF_ROWS = 15;
 
@@ -10,8 +11,9 @@ export class Region extends Storable {
         return this.#squares.sort((a, b) => a.getX() - b.getX());
     }
 
-    constructor(obstructionCallBack) {
+    constructor(name, obstructionCallBack) {
         super();
+        this.#name = name;
         this._recover(obstructionCallBack);
     }
 
@@ -20,7 +22,7 @@ export class Region extends Storable {
             for (let x = 1; x < Region.AMOUNT_OF_ROWS + 1; x++) {
                 const square = new Square(x, y, obstructionCallBack(x, y));
 
-                if (x === 1) {
+                if (!square.hasObstacle() && x === 1) {
                     square.message = 'test' + y; // TODO: remove
                 }
 
@@ -41,11 +43,11 @@ export class Region extends Storable {
     }
 
     _persist() {
-        localStorage.setItem('squares', JSON.stringify(this.#squares.map(square => square.toJSON())));
+        localStorage.setItem(this.#name, JSON.stringify(this.#squares.map(square => square.toJSON())));
     }
 
     _recover(obstructionCallBack) {
-        const rawSquares = localStorage.getItem('squares');
+        const rawSquares = localStorage.getItem(this.#name);
 
         if (rawSquares) {
             this.#squares = JSON.parse(rawSquares).map(rawSquare => Square.fromJSON(rawSquare));

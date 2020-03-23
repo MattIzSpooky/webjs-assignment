@@ -1,6 +1,7 @@
 import {RootView} from '../views/RootView';
-import {Region1Controller} from './Region1Controller';
-import {Region2Controller} from './Region2Controller';
+import {ClothesRegion} from './ClothesRegion';
+import {TierlantineRegion} from './TierlantineRegion';
+import {DecorationRegion} from './DecorationRegion';
 
 export class RootController {
     #view;
@@ -9,27 +10,37 @@ export class RootController {
     constructor() {
         this.#view = new RootView();
 
-        this.#currentRegion = new Region1Controller();
+        this.#currentRegion = new ClothesRegion();
 
-        this.#view.bindClickRegion1Button(this.#onClickRegion1);
-        this.#view.bindClickRegion2Button(this.#onClickRegion2);
+        this.#view.bindClickClothesButton(this.#onClickClothesRegion);
+        this.#view.bindClickTierlantineButton(this.#onClickTiertineRegion);
+        this.#view.bindClickDecorationButton(this.#onClickDecorationButton);
     }
 
-    #onClickRegion1 = () => {
-        if (this.#currentRegion instanceof Region1Controller) {
+    #onClickClothesRegion = () => {
+        if (this.#currentRegion instanceof ClothesRegion) {
             return;
         }
 
         this.#currentRegion.destroy();
-        this.#currentRegion = new Region1Controller();
+        this.#currentRegion = new ClothesRegion();
     };
 
-    #onClickRegion2 = () => {
-        if (this.#currentRegion instanceof Region2Controller) {
+    #onClickTiertineRegion = () => {
+        if (this.#currentRegion instanceof TierlantineRegion) {
             return;
         }
 
         this.#currentRegion.destroy();
-        this.#currentRegion = new Region2Controller();
+        this.#currentRegion = new TierlantineRegion();
+    };
+
+    #onClickDecorationButton = () => {
+        if (this.#currentRegion instanceof DecorationRegion) {
+            return;
+        }
+
+        this.#currentRegion.destroy();
+        this.#currentRegion = new DecorationRegion();
     };
 }

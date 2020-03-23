@@ -7,6 +7,8 @@ export class BaseView {
         if (new.target === BaseView) {
             throw new TypeError('Cannot construct BaseView instances directly');
         }
+
+        this.$root = this.createElement('div');
     }
 
     createElement(tag, className) {
@@ -38,7 +40,7 @@ export class BaseView {
         return div;
     }
 
-    destroyView() {
+    destroy() {
         this.$root.remove();
     }
 }

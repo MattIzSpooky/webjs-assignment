@@ -16,7 +16,7 @@ export class RegionView extends BaseView {
         this.#onClickHandler = onClickHandler;
 
         const app = this.getElement('#app');
-        this.$root = this.createElement('div');
+
         for (let i = 0; i < rowAmount; i++) {
             this.#$rows.push(this.createRow());
         }
@@ -53,10 +53,39 @@ export class RegionView extends BaseView {
     bindEventHandlersToSquares(...$squares) {
         for (const $square of $squares) {
             $square.draggable = true;
-            $square.ondragstart = this.#onDragHandler;
-            $square.ondrop = this.#onDropHandler;
+            $square.ondragstart = (ev) => this.#onDragHandler(ev);
+            $square.ondrop = this.#dropHandler;
             $square.onclick = this.#onClickHandler;
             $square.ondragover = (ev) => ev.preventDefault();
         }
     }
+
+    #dropHandler = (ev) => {
+        ev.preventDefault();
+        const data = ev.dataTransfer.getData('text');
+        const $draggedElement = document.getElementById(data);
+
+        const $draggedElementClone = $draggedElement.cloneNode(true);
+        const $targetClone = ev.currentTarget.cloneNode(true);
+
+        this.bindEventHandlersToSquares($draggedElementClone, $targetClone);
+
+        const xDrag = +$draggedElementClone.dataset.x;
+        const yDrag = +$draggedElementClone.dataset.y;
+
+        const xTarget = +ev.currentTarget.dataset.x;
+        const yTarget = +ev.currentTarget.dataset.y;
+
+        this.#onDropHandler({xDrag, yDrag}, {xTarget, yTarget});
+
+        Object.assign($draggedElementClone.dataset, ev.currentTarget.dataset);
+        Object.assign($targetClone.dataset, $draggedElement.dataset);
+        $draggedElementClone.id = ev.currentTarget.id;
+        $targetClone.id = $draggedElement.id;
+
+        ev.currentTarget.replaceWith($draggedElementClone);
+        $draggedElement.replaceWith($targetClone);
+    };
+
+
 }

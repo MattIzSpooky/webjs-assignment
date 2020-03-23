@@ -1,8 +1,9 @@
 import {BaseView} from './BaseView';
 
 export class RootView extends BaseView {
-    #$region1Button;
-    #$region2Button;
+    #clothesRegionButton;
+    #tierlantineRegionButton;
+    #decorationRegionButton;
 
     constructor() {
         super();
@@ -10,22 +11,29 @@ export class RootView extends BaseView {
         const app = this.getElement('#app');
         this.$root = this.createElement('div');
 
-        this.#$region1Button = this.createElement('button');
-        this.#$region1Button.textContent = 'Region 1';
+        this.#clothesRegionButton = this.createElement('button');
+        this.#clothesRegionButton.textContent = 'Kleding';
 
-        this.#$region2Button = this.createElement('button');
-        this.#$region2Button.textContent = 'Region 2';
+        this.#tierlantineRegionButton = this.createElement('button');
+        this.#tierlantineRegionButton.textContent = 'Tierlantine';
 
-        this.$root.append(this.#$region1Button, this.#$region2Button);
+        this.#decorationRegionButton = this.createElement('button');
+        this.#decorationRegionButton.textContent = 'Decoraties';
+
+        this.$root.append(this.#clothesRegionButton, this.#tierlantineRegionButton, this.#decorationRegionButton);
 
         app.append(this.$root);
     }
 
-    bindClickRegion1Button(handler) {
-        this.#$region1Button.addEventListener('click', () => handler())
+    bindClickClothesButton(handler) {
+        this.#clothesRegionButton.addEventListener('click', () => handler())
     }
 
-    bindClickRegion2Button(handler) {
-        this.#$region2Button.addEventListener('click', () => handler())
+    bindClickTierlantineButton(handler) {
+        this.#tierlantineRegionButton.addEventListener('click', () => handler())
+    }
+
+    bindClickDecorationButton(handler) {
+        this.#decorationRegionButton.addEventListener('click', () => handler())
     }
 }
