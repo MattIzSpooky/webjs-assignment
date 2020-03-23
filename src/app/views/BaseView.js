@@ -79,7 +79,45 @@ export class BaseView extends Destroyable {
     }
 
     showErrorModal(title, message) {
-        alert(title + ' : ' + message);
+        const $modal = this.createElement('div');
+        $modal.classList.add('my-modal');
+
+        const $modalContent = this.createElement('div');
+        $modalContent.classList.add('my-modal-content');
+
+        const $modalHeader = this.createElement('div');
+        $modalHeader.classList.add('my-modal-header');
+
+        const $closeButton = this.createElement('span');
+        $closeButton.classList.add('close', 'text-black');
+        $closeButton.textContent = 'X';
+
+        $closeButton.onclick = () => $modal.remove();
+
+        window.onclick = () => {
+            $modal.remove();
+            window.onclick = null;
+        };
+
+        const $title = this.createElement('h2');
+        $title.textContent = title;
+
+        $modalHeader.append($closeButton, title);
+
+        const $modalBody = this.createElement('div');
+        $modalBody.classList.add('my-modal-body');
+        const $modalText = this.createElement('p');
+        $modalText.textContent = message;
+
+        $modalBody.append($modalText);
+
+        $modalContent.append($modalHeader, $modalBody);
+
+        $modal.append($modalContent);
+
+        const app = document.getElementById('app');
+
+        app.prepend($modal);
     }
 
     /*createErrorModal() {
