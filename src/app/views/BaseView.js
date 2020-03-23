@@ -1,9 +1,11 @@
 import {Column} from '../util/column';
+import {Destroyable} from '../util/destroyable';
 
-export class BaseView {
+export class BaseView extends Destroyable {
     $root;
 
     constructor() {
+        super();
         if (new.target === BaseView) {
             throw new TypeError('Cannot construct BaseView instances directly');
         }
@@ -40,12 +42,44 @@ export class BaseView {
         return div;
     }
 
+    createForm(...fields) {
+        const $form = this.createElement('form');
+
+        for (const {name, type} of fields) {
+            const $inputGroup = this.createElement('div');
+            $inputGroup.classList.add('form-group');
+
+            const $label = this.createElement('label');
+            $label.textContent = name;
+            $label.setAttribute('for', name);
+
+            const $input = this.createElement('input');
+            $input.type = type;
+            $input.classList.add('form-control');
+            $input.id = name;
+            $input.name = name;
+
+            $inputGroup.append($label, $input);
+
+            $form.append($inputGroup);
+        }
+
+        const $submitButton = this.createElement('button');
+        $submitButton.type = 'submit';
+        $submitButton.textContent = 'Submit';
+        $submitButton.classList.add('btn', 'btn-primary');
+
+        $form.append($submitButton);
+
+        return $form;
+    }
+
     destroy() {
         this.$root.remove();
     }
 
     showErrorModal(title, message) {
-        alert(title + " : " + message);
+        alert(title + ' : ' + message);
     }
 
     /*createErrorModal() {
@@ -84,4 +118,15 @@ export class BaseView {
 
         return modal;
     }*/
+}
+
+// struct
+export class Input {
+    name;
+    type;
+
+    constructor(name, type) {
+        this.name = name;
+        this.type = type;
+    }
 }

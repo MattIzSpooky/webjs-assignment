@@ -1,65 +1,75 @@
 import {RootView} from '../views/RootView';
-import {ClothesRegion} from './ClothesRegion';
-import {TierlantineRegion} from './TierlantineRegion';
-import {DecorationRegion} from './DecorationRegion';
+import {ClothesRegionController} from './regions/ClothesRegionController';
+import {TierlantineRegionController} from './regions/TierlantineRegionController';
+import {DecorationRegionController} from './regions/DecorationRegionController';
+import {WeatherController} from './WeatherController';
+import {Controller} from './Controller';
 
-export class RootController {
-    #view;
-    #currentRegion;
+export class RootController extends Controller {
+    #current;
 
     constructor() {
-        this.#view = new RootView();
+        super();
+        this._view = new RootView();
 
         this._recoverFromUrl();
 
-        this.#view.bindClickClothesButton(this.#onClickClothesRegion);
-        this.#view.bindClickTierlantineButton(this.#onClickTiertineRegion);
-        this.#view.bindClickDecorationButton(this.#onClickDecorationButton);
+        this._view.bindClickClothesButton(this.#onClickClothesRegion);
+        this._view.bindClickTierlantineButton(this.#onClickTiertineRegion);
+        this._view.bindClickDecorationButton(this.#onClickDecorationButton);
+        this._view.bindClickWeatherButton(this.#onClickWeatherButton);
     }
 
     _recoverFromUrl() {
         const parts = location.pathname.split('/');
         const part = parts[1];
 
-        let region;
+        let controller;
 
         switch (part) {
             case 'clothes':
-                region = new ClothesRegion();
+                controller = new ClothesRegionController();
                 break;
             case 'tierlantine':
-                region = new TierlantineRegion();
+                controller = new TierlantineRegionController();
                 break;
             case 'decoration':
-                region = new DecorationRegion();
+                controller = new DecorationRegionController();
+                break;
+            case 'weather':
+                controller = new WeatherController();
                 break;
             default:
-                region = new ClothesRegion();
+                controller = new ClothesRegionController();
                 break;
         }
 
-        this.#currentRegion = region;
+        this.#current = controller;
     }
 
     #onClickClothesRegion = () => {
-        this._changeView(ClothesRegion, 'Clothes');
+        this._changeView(ClothesRegionController, 'Clothes');
     };
 
     #onClickTiertineRegion = () => {
-        this._changeView(TierlantineRegion, 'Tierlantine');
+        this._changeView(TierlantineRegionController, 'Tierlantine');
     };
 
     #onClickDecorationButton = () => {
-        this._changeView(DecorationRegion, 'Decoration');
+        this._changeView(DecorationRegionController, 'Decoration');
     };
 
-    _changeView(region, title) {
+    #onClickWeatherButton = () => {
+        this._changeView(WeatherController, 'Weather');
+    };
+
+    _changeView(controller, title) {
         if (location.pathname.includes(title.toLowerCase())) {
             return;
         }
 
-        this.#currentRegion.destroy();
-        this.#currentRegion = new region();
+        this.#current.destroy();
+        this.#current = new controller();
         history.pushState(null, title, `/${title.toLowerCase()}`);
     }
 }
