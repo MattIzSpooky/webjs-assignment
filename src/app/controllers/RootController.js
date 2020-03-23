@@ -42,32 +42,24 @@ export class RootController {
     }
 
     #onClickClothesRegion = () => {
-        if (this.#currentRegion instanceof ClothesRegion) {
-            return;
-        }
-
-        this.#currentRegion.destroy();
-        this.#currentRegion = new ClothesRegion();
-        history.pushState(null, 'Clothes', '/clothes');
+        this._changeView(ClothesRegion, 'Clothes');
     };
 
     #onClickTiertineRegion = () => {
-        if (this.#currentRegion instanceof TierlantineRegion) {
-            return;
-        }
-
-        this.#currentRegion.destroy();
-        this.#currentRegion = new TierlantineRegion();
-        history.pushState(null, 'Tierlantine', '/tierlantine');
+        this._changeView(TierlantineRegion, 'Tierlantine');
     };
 
     #onClickDecorationButton = () => {
-        if (this.#currentRegion instanceof DecorationRegion) {
+        this._changeView(DecorationRegion, 'Decoration');
+    };
+
+    _changeView(currentRegion, title) {
+        if (location.pathname.includes(title.toLowerCase())) {
             return;
         }
 
         this.#currentRegion.destroy();
-        this.#currentRegion = new DecorationRegion();
-        history.pushState(null, 'Decoration', '/decoration');
-    };
+        this.#currentRegion = new currentRegion();
+        history.pushState(null, title, `/${title.toLowerCase()}`);
+    }
 }
