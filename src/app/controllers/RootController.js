@@ -53,13 +53,13 @@ export class RootController {
         this._changeView(DecorationRegion, 'Decoration');
     };
 
-    _changeView(currentRegion, title) {
+    _changeView(region, title) {
         if (location.pathname.includes(title.toLowerCase())) {
             return;
         }
 
         this.#currentRegion.destroy();
-        this.#currentRegion = new currentRegion();
+        this.#currentRegion = new region();
         history.pushState(null, title, `/${title.toLowerCase()}`);
     }
 }
