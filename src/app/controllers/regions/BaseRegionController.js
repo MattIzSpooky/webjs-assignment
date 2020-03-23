@@ -1,8 +1,8 @@
-export class BaseRegionController {
-    _regionModel;
-    _regionView;
+import {Controller} from '../Controller';
 
+export class BaseRegionController extends Controller {
     constructor() {
+        super();
         if (new.target === BaseRegionController) {
             throw new TypeError('Cannot construct BaseRegionController instances directly');
         }
@@ -13,18 +13,18 @@ export class BaseRegionController {
     };
 
     onSquareDrop = ({xDrag, yDrag}, {xTarget, yTarget}) => {
-        const squares = this._regionModel.getSquares();
+        const squares = this._model.getSquares();
 
         const squareDrag = this._findSquareByCoords(squares, xDrag, yDrag);
         const squareTarget = this._findSquareByCoords(squares, xTarget, yTarget);
 
-        this._regionModel.swapSquares(squareDrag, squareTarget);
+        this._model.swapSquares(squareDrag, squareTarget);
     };
 
     onSquareClick = (ev) => {
         ev.preventDefault();
 
-        const squares = this._regionModel.getSquares();
+        const squares = this._model.getSquares();
 
         const x = +ev.currentTarget.dataset.x;
         const y = +ev.currentTarget.dataset.y;
@@ -38,11 +38,6 @@ export class BaseRegionController {
     }
 
     renderView() {
-        this._regionView.renderSquares(this._regionModel.getSquares());
-    }
-
-    destroy() {
-        this._regionModel = null;
-        this._regionView.destroy();
+        this._view.renderSquares(this._model.getSquares());
     }
 }

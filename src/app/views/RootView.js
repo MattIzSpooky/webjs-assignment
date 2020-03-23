@@ -4,6 +4,7 @@ export class RootView extends BaseView {
     #clothesRegionButton;
     #tierlantineRegionButton;
     #decorationRegionButton;
+    #weatherButton;
 
     constructor() {
         super();
@@ -20,7 +21,10 @@ export class RootView extends BaseView {
         this.#decorationRegionButton = this.createElement('button');
         this.#decorationRegionButton.textContent = 'Decoraties';
 
-        this.$root.append(this._createNavbar(this.#clothesRegionButton, this.#tierlantineRegionButton, this.#decorationRegionButton));
+        this.#weatherButton = this.createElement('button');
+        this.#weatherButton.textContent = 'Weather';
+
+        this.$root.append(this._createNavbar(this.#clothesRegionButton, this.#tierlantineRegionButton, this.#decorationRegionButton, this.#weatherButton));
 
         app.append(this.$root);
     }
@@ -48,8 +52,7 @@ export class RootView extends BaseView {
         $routes.classList.add('navbar-nav', 'mr-auto');
 
         for (const $route of $routeButtons) {
-            $route.classList.add('nav-item', 'nav-link');
-            $route.classList.add('btn', 'btn-link');
+            $route.classList.add('nav-item', 'nav-link', 'btn', 'btn-link');
 
             $routes.append($route);
         }
@@ -70,5 +73,9 @@ export class RootView extends BaseView {
 
     bindClickDecorationButton(handler) {
         this.#decorationRegionButton.addEventListener('click', () => handler())
+    }
+
+    bindClickWeatherButton(handler) {
+        this.#weatherButton.addEventListener('click', () => handler())
     }
 }
