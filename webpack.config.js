@@ -12,6 +12,12 @@ module.exports = {
         filename: '[name].[chunkhash].js',
         path: path.resolve(__dirname, 'dist')
     },
+    devServer: {
+        port: 8080,
+        historyApiFallback: {
+            index: '/'
+        }
+    },
     module: {
         rules: [
             {

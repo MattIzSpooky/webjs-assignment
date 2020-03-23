@@ -1,6 +1,6 @@
 import './styles/main.scss';
 import 'bootstrap';
 
-import {RegionController} from './app/controllers/RegionController';
+import {RootController} from './app/controllers/RootController';
 
-new RegionController();
+new RootController();
