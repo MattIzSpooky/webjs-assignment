@@ -1,4 +1,4 @@
-import {Product} from "../util/product";
+import {Product} from "./product";
 
 export class Decoration extends Product {
     #color;
@@ -48,6 +48,7 @@ export class Decoration extends Product {
 
     toJSON() {
         return JSON.stringify({
+            type: this.constructor.name,
             name: this.getName(),
             description: this.getDescription(),
             purchasePrice: this.getPurchasePrice(),

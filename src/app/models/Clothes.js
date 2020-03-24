@@ -1,4 +1,4 @@
-import {Product} from "../util/product";
+import {Product} from './product';
 
 export class Clothes extends Product {
     #color;
@@ -15,6 +15,10 @@ export class Clothes extends Product {
     }
 
     setColor(value) {
+        if (!/^#[0-9A-F]{6}$/i.test(value)) {
+            throw new Error(`Invalid color: ${value}`);
+        }
+
         this.#color = value;
     }
 
@@ -24,17 +28,23 @@ export class Clothes extends Product {
 
     setSize(value) {
         this.checkNegativeValue(value);
-        
+
         this.#size = value;
     }
 
     toString() {
-        return `name: ${this.getName()}. description: ${this.getDescription()}. purchasePrice ${this.getPurchasePrice()}. 
-        minimalStock: ${this.getMinimalStock()}. currentStock: ${this.getCurrentStock()}. color: ${this.getColor()}. size: ${this.getSize()}.`;
+        return `name: ${this.getName()}.\n
+        description: ${this.getDescription()}.\n
+        purchasePrice ${this.getPurchasePrice()}.\n
+        minimalStock: ${this.getMinimalStock()}.\n
+        currentStock: ${this.getCurrentStock()}.\n
+        color: ${this.getColor()}.\n
+        size: ${this.getSize()}.`;
     }
 
     toJSON() {
         return JSON.stringify({
+            type: this.constructor.name,
             name: this.getName(),
             description: this.getDescription(),
             purchasePrice: this.getPurchasePrice(),

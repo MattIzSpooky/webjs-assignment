@@ -1,7 +1,10 @@
+import {ProductFactory} from '../util/product-factory';
+
 export class Square {
     #x;
     #y;
     #hasObstacle;
+    #product;
 
     hasObstacle() {
         return this.#hasObstacle;
@@ -15,10 +18,13 @@ export class Square {
         return this.#y;
     }
 
-    // TODO: remove this temp thingy.
-    // TODO: remove all references in code to message later down the line.
-    // This is just to test persisting and swapping squares.
-    message;
+    getProduct() {
+        return this.#product;
+    }
+
+    setProduct(product) {
+        this.#product = product;
+    }
 
     constructor(x, y, hasObstacle = false) {
         this.#x = x;
@@ -27,7 +33,12 @@ export class Square {
     }
 
     toString() {
-        return `x: ${this.#x}. y: ${this.#y}. hasObstacle: ${this.hasObstacle()}. message: ${this.message}`;  // TODO: remove message
+        return `
+        x: ${this.#x}. 
+        y: ${this.#y}. 
+        hasObstacle: ${this.#hasObstacle}.
+        product: ${this.#product ? this.#product.toString() : undefined} 
+        `;
     }
 
     toJSON() {
@@ -35,7 +46,7 @@ export class Square {
             x: this.getX(),
             y: this.getY(),
             hasObstacle: this.hasObstacle(),
-            message: this.message // TODO: remove message
+            product: this.#product ? this.#product.toJSON() : undefined
         });
     }
 
@@ -43,7 +54,10 @@ export class Square {
         const data = JSON.parse(json);
 
         const square = new this(data.x, data.y, data.hasObstacle);
-        square.message = data.message; // TODO: remove message
+
+        if (data.product) {
+            square.setProduct(new ProductFactory().fromJSON(data.product));
+        }
 
         return square;
     }

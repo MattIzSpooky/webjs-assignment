@@ -30,26 +30,21 @@ export class RootView extends BaseView {
     }
 
     _createNavbar(...$routeButtons) {
-        const $nav = this.createElement('nav');
-        $nav.classList.add('navbar', 'navbar-expand-lg', 'navbar-light', 'bg-light', 'row');
+        const $nav = this.createElement('nav', 'navbar', 'navbar-expand-lg', 'navbar-light', 'bg-light', 'row');
 
-        const $routeToggle = this.createElement('button');
-        $routeToggle.classList.add('navbar-toggler');
+        const $routeToggle = this.createElement('button', 'navbar-toggler');
         $routeToggle.type = 'button';
         $routeToggle.dataset.toggle = 'collapse';
         $routeToggle.dataset.target = '#navbarNavAltMarkup';
 
-        const $toggler = this.createElement('span');
-        $toggler.classList.add('navbar-toggler-icon');
+        const $toggler = this.createElement('span', 'navbar-toggler-icon');
 
         $routeToggle.append($toggler);
 
-        const $routesWrapper = this.createElement('div');
-        $routesWrapper.classList.add('collapse', 'navbar-collapse');
+        const $routesWrapper = this.createElement('div', 'collapse', 'navbar-collapse');
         $routesWrapper.id = 'navbarNavAltMarkup';
 
-        const $routes = this.createElement('div');
-        $routes.classList.add('navbar-nav', 'mr-auto');
+        const $routes = this.createElement('div', 'navbar-nav', 'mr-auto');
 
         for (const $route of $routeButtons) {
             $route.classList.add('nav-item', 'nav-link', 'btn', 'btn-link');
@@ -64,18 +59,18 @@ export class RootView extends BaseView {
     }
 
     bindClickClothesButton(handler) {
-        this.#clothesRegionButton.addEventListener('click', () => handler())
+        this.#clothesRegionButton.onclick = handler;
     }
 
     bindClickTierlantineButton(handler) {
-        this.#tierlantineRegionButton.addEventListener('click', () => handler())
+        this.#tierlantineRegionButton.onclick = handler;
     }
 
     bindClickDecorationButton(handler) {
-        this.#decorationRegionButton.addEventListener('click', () => handler())
+        this.#decorationRegionButton.onclick = handler;
     }
 
     bindClickWeatherButton(handler) {
-        this.#weatherButton.addEventListener('click', () => handler())
+        this.#weatherButton.onclick = handler;
     }
 }

@@ -10,7 +10,7 @@ export class Product {
 
     constructor(name, description, purchasePrice, minimalStock, currentStock) {
         if (new.target === Product) {
-            throw new TypeError("Cannot construct Product instances directly");
+            throw new TypeError('Cannot construct Product instances directly');
         }
 
         this.setName(name);
@@ -68,7 +68,15 @@ export class Product {
 
     checkNegativeValue(value) {
         if (value < 0) {
-            throw new RangeError("Cannot set a nagative value");
+            throw new RangeError('Cannot set a nagative value');
         }
+    }
+
+    toJSON() {
+        throw new Error('Method toJSON() must be implemented.');
+    }
+
+    static fromJSON() {
+        throw new Error('Method fromJSON() must be implemented.');
     }
 }

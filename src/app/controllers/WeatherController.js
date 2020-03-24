@@ -22,7 +22,7 @@ export class WeatherController extends Controller {
             this._view.renderWeatherInfo(Weather.BASE_URI, data);
         } catch (e) {
             const data = JSON.parse(e.message);
-            this._view.showErrorModal(`Server status: ${data.cod}`, data.message);
+            this.showError(`Server status: ${data.cod}`, data.message);
         }
     };
 }
