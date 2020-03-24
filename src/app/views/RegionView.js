@@ -38,15 +38,12 @@ export class RegionView extends BaseView {
         $regionColumn.append(...this.#$rows);
 
         const $productsColumn = this.createColumn(colBuilder.addWidth(3).getResult());
-        this.#$newProductButton = this.createElement('button');
-        this.#$newProductButton.classList.add('btn', 'btn-primary');
+        this.#$newProductButton = this.createElement('button', 'btn', 'btn-primary');
         this.#$newProductButton.textContent = 'New product';
 
-        const $formGroup = this.createElement('div');
-        $formGroup.classList.add('form-group', 'w-100');
+        const $formGroup = this.createElement('div', 'form-group', 'w-100');
 
-        this.#$unmanagedProductsDropdown = this.createElement('select');
-        this.#$unmanagedProductsDropdown.classList.add('form-control');
+        this.#$unmanagedProductsDropdown = this.createElement('select', 'form-control');
         this.#$unmanagedProductsDropdown.id = 'product';
 
         const $defaultOption = this.createElement('option');
@@ -78,15 +75,13 @@ export class RegionView extends BaseView {
     }
 
     _createSquare(square) {
-        const $square = this.createElement('div');
+        const $square = this.createElement('div', 'square');
 
         const squareProduct = square.getProduct();
 
         if (squareProduct) {
             $square.textContent = squareProduct.getName();
         }
-
-        $square.classList.add('square');
 
         if (square.hasObstacle()) {
             $square.classList.add('square-obstruction');

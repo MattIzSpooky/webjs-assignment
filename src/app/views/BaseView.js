@@ -13,10 +13,12 @@ export class BaseView extends Destroyable {
         this.$root = this.createElement('div');
     }
 
-    createElement(tag, className) {
+    createElement(tag, ...classNames) {
         const element = document.createElement(tag);
 
-        if (className) element.classList.add(className);
+        if (classNames.length > 0) {
+            element.classList.add(...classNames);
+        }
 
         return element;
     }
@@ -46,16 +48,14 @@ export class BaseView extends Destroyable {
         const $form = this.createElement('form');
 
         for (const {name, type} of fields) {
-            const $inputGroup = this.createElement('div');
-            $inputGroup.classList.add('form-group');
+            const $inputGroup = this.createElement('div', 'form-group');
 
             const $label = this.createElement('label');
             $label.textContent = name;
             $label.setAttribute('for', name);
 
-            const $input = this.createElement('input');
+            const $input = this.createElement('input', 'form-control');
             $input.type = type;
-            $input.classList.add('form-control');
             $input.id = name;
             $input.name = name;
 
@@ -64,10 +64,9 @@ export class BaseView extends Destroyable {
             $form.append($inputGroup);
         }
 
-        const $submitButton = this.createElement('button');
+        const $submitButton = this.createElement('button', 'btn', 'btn-primary');
         $submitButton.type = 'submit';
         $submitButton.textContent = 'Submit';
-        $submitButton.classList.add('btn', 'btn-primary');
 
         $form.append($submitButton);
 
@@ -79,17 +78,13 @@ export class BaseView extends Destroyable {
     }
 
     showErrorModal(title, message) {
-        const $modal = this.createElement('div');
-        $modal.classList.add('my-modal');
+        const $modal = this.createElement('div', 'my-modal');
 
-        const $modalContent = this.createElement('div');
-        $modalContent.classList.add('my-modal-content');
+        const $modalContent = this.createElement('div', 'my-modal-content');
 
-        const $modalHeader = this.createElement('div');
-        $modalHeader.classList.add('my-modal-header');
+        const $modalHeader = this.createElement('div', 'my-modal-header');
 
-        const $closeButton = this.createElement('span');
-        $closeButton.classList.add('close', 'text-black');
+        const $closeButton = this.createElement('span', 'close', 'text-black');
         $closeButton.textContent = 'X';
 
         $closeButton.onclick = () => $modal.remove();
@@ -104,8 +99,7 @@ export class BaseView extends Destroyable {
 
         $modalHeader.append($closeButton, $title);
 
-        const $modalBody = this.createElement('div');
-        $modalBody.classList.add('my-modal-body');
+        const $modalBody = this.createElement('div', 'my-modal-body');
         const $modalText = this.createElement('p');
         $modalText.textContent = message;
 
@@ -116,45 +110,46 @@ export class BaseView extends Destroyable {
         $modal.append($modalContent);
 
         const app = this.getElement('#app');
+
         app.prepend($modal);
     }
 
-    /*createErrorModal() {
-        let modalButtonSpan = this.createElement('span');
-        let modalButton = this.createElement('button', 'close');
-        let modalTitle = this.createElement('h5', 'modal-title');
-        let modalHeader = this.createElement('div', 'modal-header');
-        let modalBody = this.createElement('div', 'modal-body');
-        let modelContent = this.createElement('div', 'modal-content');
-        let modalDialog = this.createElement('div', 'modal-dialog', 'modal-sm');
-        let modal = this.createElement('div', 'modal', 'fade');
-
-        modalTitle.id = 'modalLabel';
-        modalBody.id = 'modalBody';
-        modal.id = 'modal';
-
-        modalButton.dataset.dismiss = "modal";
-        modalButton.setAttribute('aria-label', 'Close');
-        modalButtonSpan.setAttribute('aria-hidden', 'true');
-        modalButtonSpan.innerText = '&times;';
-
-        modal.setAttribute('role', 'dialog');
-        modal.setAttribute('tabindex', '-1');
-        modal.setAttribute('aria-labelledby', 'errorModalLabel');
-        modal.setAttribute('aria-hidden', 'true');
-
-        modalDialog.setAttribute('role', 'document');
-
-        modal.appendChild(modalDialog);
-        modalDialog.appendChild(modelContent);
-        modelContent.appendChild(modalHeader);
-        modelContent.appendChild(modalBody);
-        modalHeader.appendChild(modalTitle);
-        modalHeader.appendChild(modalButton);
-        modalButton.appendChild(modalButtonSpan);
-
-        return modal;
-    }*/
+    // createErrorModal() {
+    //     let modalButtonSpan = this.createElement('span');
+    //     let modalButton = this.createElement('button', 'close');
+    //     let modalTitle = this.createElement('h5', 'modal-title');
+    //     let modalHeader = this.createElement('div', 'modal-header');
+    //     let modalBody = this.createElement('div', 'modal-body');
+    //     let modelContent = this.createElement('div', 'modal-content');
+    //     let modalDialog = this.createElement('div', 'modal-dialog', 'modal-sm');
+    //     let modal = this.createElement('div', 'modal', 'fade');
+    //
+    //     modalTitle.id = 'modalLabel';
+    //     modalBody.id = 'modalBody';
+    //     modal.id = 'modal';
+    //
+    //     modalButton.dataset.dismiss = 'modal';
+    //     modalButton.setAttribute('aria-label', 'Close');
+    //     modalButtonSpan.setAttribute('aria-hidden', 'true');
+    //     modalButtonSpan.innerText = '&times;';
+    //
+    //     modal.setAttribute('role', 'dialog');
+    //     modal.setAttribute('tabindex', '-1');
+    //     modal.setAttribute('aria-labelledby', 'errorModalLabel');
+    //     modal.setAttribute('aria-hidden', 'true');
+    //
+    //     modalDialog.setAttribute('role', 'document');
+    //
+    //     modal.appendChild(modalDialog);
+    //     modalDialog.appendChild(modelContent);
+    //     modelContent.appendChild(modalHeader);
+    //     modelContent.appendChild(modalBody);
+    //     modalHeader.appendChild(modalTitle);
+    //     modalHeader.appendChild(modalButton);
+    //     modalButton.appendChild(modalButtonSpan);
+    //
+    //     return modal;
+    // }
 }
 
 // struct
