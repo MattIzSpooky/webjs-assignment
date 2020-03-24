@@ -11,22 +11,8 @@ export class ClothesRegionController extends BaseRegionController {
 
         this.renderView();
         this._view.bindNewProductClick(this.#onNewProductClick);
-        this._view.bindDropdownChange(this.#onDropdownChange);
+        this._view.bindDropdownChange(this.onDropdownChange);
     }
-
-    #onDropdownChange = (ev) => {
-        ev.preventDefault();
-
-        const value = ev.target.value;
-        if (value === 'Select a product') {
-            this._view.clearCurrentProduct();
-            console.log('test');
-            return;
-        }
-
-        const currentProduct = this._model.findUnmanagedProduct(ev.target.value);
-        this._view.renderCurrentProduct(currentProduct);
-    };
 
     #onNewProductClick = (ev) => {
         ev.preventDefault();
@@ -36,7 +22,7 @@ export class ClothesRegionController extends BaseRegionController {
             this._model.addUnmanagedProduct(clothes);
             this._view.rerenderProductDropdown(this._model.getUnmanagedProducts());
         } catch (e) {
-            this.showError('test', 'test');
+            this.showError('Error', e.message);
         }
     };
 

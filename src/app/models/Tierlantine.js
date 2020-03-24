@@ -1,4 +1,4 @@
-import {Product} from "./product";
+import {Product} from './product';
 
 export class Tierlantine extends Product {
     #weight;
@@ -25,6 +25,7 @@ export class Tierlantine extends Product {
 
     toJSON() {
         return JSON.stringify({
+            type: this.constructor.name,
             name: this.getName(),
             description: this.getDescription(),
             purchasePrice: this.getPurchasePrice(),

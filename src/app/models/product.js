@@ -1,8 +1,6 @@
 /**
  * An abstract class
  */
-import {Clothes} from './Clothes';
-
 export class Product {
     #name;
     #description;
@@ -78,13 +76,7 @@ export class Product {
         throw new Error('Method toJSON() must be implemented.');
     }
 
-    static fromJSON(data) {
-        if (!data.type) {
-            throw new Error(`Invalid Product!: ${JSON.stringify(data)}`);
-        }
-
-        if (data.type === 'Clothes') {
-            return Clothes.fromJSON(JSON.stringify(data));
-        }
+    static fromJSON() {
+        throw new Error('Method fromJSON() must be implemented.');
     }
 }

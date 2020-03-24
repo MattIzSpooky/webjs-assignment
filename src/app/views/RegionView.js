@@ -69,27 +69,7 @@ export class RegionView extends BaseView {
         let rowCount = 0;
 
         for (const square of squares) {
-            const $square = this.createElement('div');
-
-            const squareProduct = square.getProduct();
-
-            if (squareProduct) {
-                $square.textContent = squareProduct.getName();
-            }
-
-            $square.classList.add('square');
-
-            if (square.hasObstacle()) {
-                $square.classList.add('square-obstruction');
-            } else {
-                this.bindEventHandlersToSquares($square);
-            }
-            $square.dataset.x = square.getX();
-            $square.dataset.y = square.getY();
-            $square.dataset.type = 'square';
-            $square.id = `${square.getX()}-${square.getY()}`;
-
-            this.#$rows[rowCount].appendChild($square);
+            this.#$rows[rowCount].appendChild(this._createSquare(square));
 
             if (square.getY() % this.#rowAmount === 0) {
                 rowCount++;
@@ -97,12 +77,39 @@ export class RegionView extends BaseView {
         }
     }
 
+    _createSquare(square) {
+        const $square = this.createElement('div');
+
+        const squareProduct = square.getProduct();
+
+        if (squareProduct) {
+            $square.textContent = squareProduct.getName();
+        }
+
+        $square.classList.add('square');
+
+        if (square.hasObstacle()) {
+            $square.classList.add('square-obstruction');
+        } else {
+            this.bindEventHandlersToSquares($square);
+        }
+        $square.dataset.x = square.getX();
+        $square.dataset.y = square.getY();
+        $square.dataset.type = 'square';
+        $square.id = `${square.getX()}-${square.getY()}`;
+
+        return $square;
+    }
+
     bindNewProductClick(handler) {
         this.#$newProductButton.onclick = handler;
     }
 
     bindDropdownChange(handler) {
-        this.#$unmanagedProductsDropdown.onchange = handler;
+        this.#$unmanagedProductsDropdown.onchange = (ev) => {
+            ev.preventDefault();
+            handler(ev.target.value);
+        };
     }
 
     renderCurrentProduct(product) {
@@ -185,10 +192,15 @@ export class RegionView extends BaseView {
 
             ev.currentTarget.replaceWith($draggedElementClone);
             $draggedElement.replaceWith($targetClone);
-        } else {
-            this.#onProductDropHandler($draggedElement.dataset.productName, {xTarget, yTarget});
+            return;
         }
+
+        this.bindEventHandlersToSquares($targetClone);
+
+        const productName = $draggedElement.dataset.productName;
+        this.#onProductDropHandler(productName, {xTarget, yTarget});
+        $draggedElement.remove();
+        $targetClone.textContent = productName;
+        ev.currentTarget.replaceWith($targetClone);
     };
-
-
 }
