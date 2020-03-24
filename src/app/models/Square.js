@@ -2,6 +2,7 @@ export class Square {
     #x;
     #y;
     #hasObstacle;
+    #product;
 
     hasObstacle() {
         return this.#hasObstacle;
@@ -15,6 +16,14 @@ export class Square {
         return this.#y;
     }
 
+    getProduct() {
+        return this.#product;
+    }
+
+    setProduct(product) {
+        this.#product = product;
+    }
+
     // TODO: remove this temp thingy.
     // TODO: remove all references in code to message later down the line.
     // This is just to test persisting and swapping squares.
@@ -26,8 +35,15 @@ export class Square {
         this.#hasObstacle = hasObstacle;
     }
 
+    // TODO: remove message
     toString() {
-        return `x: ${this.#x}. y: ${this.#y}. hasObstacle: ${this.hasObstacle()}. message: ${this.message}`;  // TODO: remove message
+        return `
+        x: ${this.#x}. 
+        y: ${this.#y}. 
+        hasObstacle: ${this.hasObstacle}. 
+        message: ${this.message}
+        product: ${this.#product.toString()} 
+        `;
     }
 
     toJSON() {
@@ -35,7 +51,8 @@ export class Square {
             x: this.getX(),
             y: this.getY(),
             hasObstacle: this.hasObstacle(),
-            message: this.message // TODO: remove message
+            message: this.message, // TODO: remove message
+            product: this.#product ? this.#product.toJSON() : undefined
         });
     }
 
@@ -44,6 +61,13 @@ export class Square {
 
         const square = new this(data.x, data.y, data.hasObstacle);
         square.message = data.message; // TODO: remove message
+
+        // if (data.product) {
+        //     console.log(data.product);
+        //     console.log(Product.fromJSON(data.product));
+        //     square.setProduct(JSON.parse(data.product)); // TODO: check if this causes issues.
+        //     console.log(square.getProduct());
+        // }
 
         return square;
     }

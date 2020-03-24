@@ -21,6 +21,14 @@ export class BaseRegionController extends Controller {
         this._model.swapSquares(squareDrag, squareTarget);
     };
 
+    onProductDrop = (productName, {xTarget, yTarget}) => {
+        const squares = this._model.getSquares();
+        const square = this._findSquareByCoords(squares, xTarget, yTarget);
+        const product = this._model.findUnmanagedProduct(productName);
+
+        this._model.placeProductOnSquare(product, square);
+    };
+
     onSquareClick = (ev) => {
         ev.preventDefault();
 

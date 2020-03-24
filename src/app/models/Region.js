@@ -2,13 +2,22 @@ import {Storable} from '../util/storable';
 import {Square} from './Square';
 
 export class Region extends Storable {
-    #squares = [];
     #name;
+    #squares = [];
+    #unmanagedProducts = [];
 
     static AMOUNT_OF_ROWS = 15;
 
     getSquares() {
         return this.#squares.sort((a, b) => a.getX() - b.getX());
+    }
+
+    getUnmanagedProducts() {
+        return this.#unmanagedProducts;
+    }
+
+    findUnmanagedProduct(name) {
+        return this.#unmanagedProducts.find(p => p.getName() === name);
     }
 
     constructor(name, obstructionCallBack) {
@@ -31,6 +40,17 @@ export class Region extends Storable {
         }
     }
 
+    /**
+     * @param {Product} newProduct
+     */
+    addUnmanagedProduct(newProduct) {
+        if (this.#unmanagedProducts.some(product => product.getName() === newProduct.getName())) {
+            throw new Error('No duplicate entries.');
+        }
+
+        this.#unmanagedProducts.push(newProduct);
+    }
+
     swapSquares(square1, square2) {
         // TODO: replace with actual data.
         const square1message = square1.message; // TODO: remove
@@ -39,6 +59,13 @@ export class Region extends Storable {
 
         square2.message = square1message;  // TODO: remove
 
+        this._persist();
+    }
+
+    placeProductOnSquare(product, square) {
+        square.setProduct(product);
+
+        console.log(this.#squares.find(s => s.getProduct() !== null));
         this._persist();
     }
 

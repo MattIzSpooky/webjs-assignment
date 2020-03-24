@@ -102,7 +102,7 @@ export class BaseView extends Destroyable {
         const $title = this.createElement('h2');
         $title.textContent = title;
 
-        $modalHeader.append($closeButton, title);
+        $modalHeader.append($closeButton, $title);
 
         const $modalBody = this.createElement('div');
         $modalBody.classList.add('my-modal-body');
@@ -115,8 +115,7 @@ export class BaseView extends Destroyable {
 
         $modal.append($modalContent);
 
-        const app = document.getElementById('app');
-
+        const app = this.getElement('#app');
         app.prepend($modal);
     }
 

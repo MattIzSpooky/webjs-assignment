@@ -64,18 +64,18 @@ export class RootView extends BaseView {
     }
 
     bindClickClothesButton(handler) {
-        this.#clothesRegionButton.addEventListener('click', () => handler())
+        this.#clothesRegionButton.onclick = handler;
     }
 
     bindClickTierlantineButton(handler) {
-        this.#tierlantineRegionButton.addEventListener('click', () => handler())
+        this.#tierlantineRegionButton.onclick = handler;
     }
 
     bindClickDecorationButton(handler) {
-        this.#decorationRegionButton.addEventListener('click', () => handler())
+        this.#decorationRegionButton.onclick = handler;
     }
 
     bindClickWeatherButton(handler) {
-        this.#weatherButton.addEventListener('click', () => handler())
+        this.#weatherButton.onclick = handler;
     }
 }

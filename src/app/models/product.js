@@ -1,6 +1,8 @@
 /**
  * An abstract class
  */
+import {Clothes} from './Clothes';
+
 export class Product {
     #name;
     #description;
@@ -10,7 +12,7 @@ export class Product {
 
     constructor(name, description, purchasePrice, minimalStock, currentStock) {
         if (new.target === Product) {
-            throw new TypeError("Cannot construct Product instances directly");
+            throw new TypeError('Cannot construct Product instances directly');
         }
 
         this.setName(name);
@@ -68,7 +70,21 @@ export class Product {
 
     checkNegativeValue(value) {
         if (value < 0) {
-            throw new RangeError("Cannot set a nagative value");
+            throw new RangeError('Cannot set a nagative value');
+        }
+    }
+
+    toJSON() {
+        throw new Error('Method toJSON() must be implemented.');
+    }
+
+    static fromJSON(data) {
+        if (!data.type) {
+            throw new Error(`Invalid Product!: ${JSON.stringify(data)}`);
+        }
+
+        if (data.type === 'Clothes') {
+            return Clothes.fromJSON(JSON.stringify(data));
         }
     }
 }

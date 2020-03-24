@@ -1,4 +1,4 @@
-import {Product} from "../util/product";
+import {Product} from "./product";
 
 export class Tierlantine extends Product {
     #weight;
