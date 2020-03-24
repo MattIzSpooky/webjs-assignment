@@ -73,6 +73,31 @@ export class BaseView extends Destroyable {
         return $form;
     }
 
+    createCard(title, ...texts) {
+        const $card = this.createElement('div', 'card');
+        const $content = this.createElement('div', 'card-body');
+
+        let $title;
+
+        if (title.tagName) {
+            $title = title;
+        } else {
+            $title = this.createElement('div', 'card-header', 'bg-info', 'text-white');
+            $title.textContent = title;
+        }
+
+        for (const text of texts) {
+            const $text = this.createElement('p', 'card-text');
+            $text.textContent = text;
+
+            $content.append($text);
+        }
+
+        $card.append($title, $content);
+
+        return $card;
+    }
+
     destroy() {
         this.$root.remove();
     }
