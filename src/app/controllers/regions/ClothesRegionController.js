@@ -4,8 +4,6 @@ import {RegionView} from '../../views/RegionView';
 import {Clothes} from '../../models/Clothes';
 
 export class ClothesRegionController extends BaseRegionController {
-    #count = 0; // temporary.
-
     constructor() {
         super();
         this._model = new Region('clothes', (x, y) => y % 4 === 0 && x % 4 === 0);
@@ -32,21 +30,13 @@ export class ClothesRegionController extends BaseRegionController {
 
     #onNewProductClick = (ev) => {
         ev.preventDefault();
-
-        this.#count++;
-
+        ev.stopPropagation();
         try {
             const clothes = new Clothes('test', 'description', 3, 4, 5, '#000000', 3);
             this._model.addUnmanagedProduct(clothes);
             this._view.rerenderProductDropdown(this._model.getUnmanagedProducts());
         } catch (e) {
-            this.showError('test', 'test'); // FIXME: not showing.
-            console.log('hit');
-            //
-            // const test =  document.createElement('div');
-            // test.textContent = 'test';
-            //
-            // document.querySelector('#app').prepend(test);
+            this.showError('test', 'test');
         }
     };
 
