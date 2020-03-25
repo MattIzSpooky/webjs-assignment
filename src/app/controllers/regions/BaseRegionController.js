@@ -1,4 +1,6 @@
 import {Controller} from '../Controller';
+import {fileToBase64} from '../../util/file';
+import {CustomAttribute} from '../../models/product';
 
 export class BaseRegionController extends Controller {
     constructor() {
@@ -46,11 +48,15 @@ export class BaseRegionController extends Controller {
 
         const squares = this._model.getSquares();
 
-        const x = +ev.currentTarget.dataset.x;
-        const y = +ev.currentTarget.dataset.y;
-        const square = this._findSquareByCoords(squares, x, y);
+        const {x, y} = ev.currentTarget.dataset;
 
-        console.log(square.toString());
+        const square = this._findSquareByCoords(squares, +x, +y);
+
+        const product = square.getProduct();
+
+        if (product) {
+            this._view.showProductEdit(square);
+        }
     };
 
     _findSquareByCoords(squares, x, y) {
@@ -61,8 +67,44 @@ export class BaseRegionController extends Controller {
         this._view.renderSquares(this._model.getSquares());
 
         const products = this._model.getUnmanagedProducts();
+
         if (products.length > 0) {
             this._view.rerenderProductDropdown(products);
         }
     }
+
+    /**
+     *
+     * @param {FormData} formData
+     * @param {Clothes} product
+     *  @param {Square} square
+     * @returns {Promise<void>}
+     */
+    onProductDetailsForm = async (formData, product, square) => {
+        try {
+            product.setDescription(formData.get('description'));
+
+            const imageFile = formData.get('productImage');
+
+            if (imageFile.size > 0) {
+                product.setImage(await fileToBase64(imageFile));
+            } else {
+                product.setImage(null);
+            }
+
+            product.clearCustomAttributes();
+            // Remove the ones we dont want as custom. we already have their data.
+            formData.delete('description');
+            formData.delete('productImage');
+
+            for (const [key, value] of formData) {
+                product.addCustomAttribute(new CustomAttribute(key, value));
+            }
+
+            this._model._persist();
+            this._view.updateSquare(square);
+        } catch (e) {
+            this.showError(`Error`, e.message);
+        }
+    };
 }
