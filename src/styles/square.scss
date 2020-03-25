@@ -1,13 +1,17 @@
 .square {
   height: 50px;
   width: 50px;
+  max-height: 50px;
+  max-width: 50px;
   background-color: teal;
 
+  background-repeat: no-repeat;
+  background-size: 50px;
   border: 2px solid black;
 
   text-align: center;
 
-  margin: calc(1rem / 2);
+  margin: 0.5rem;
 
   &-obstruction {
     background-color: red;

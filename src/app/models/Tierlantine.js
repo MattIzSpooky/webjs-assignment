@@ -32,13 +32,18 @@ export class Tierlantine extends Product {
             minimalStock: this.getMinimalStock(),
             currentStock: this.getCurrentStock(),
             weight: this.getWeight(),
+            image: this.getImage()
         });
     }
 
     static fromJSON(json) {
         const data = JSON.parse(json);
 
-        return new this(data.name, data.description, data.purchasePrice,
+        const product = new this(data.name, data.description, data.purchasePrice,
             data.minimalStock, data.currentStock, data.weight);
+
+        product.setImage(data.image);
+
+        return product;
     }
 }

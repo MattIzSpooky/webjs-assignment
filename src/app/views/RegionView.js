@@ -1,5 +1,6 @@
-import {BaseView} from './BaseView';
+import {BaseView, Input} from './BaseView';
 import {ColumnBuilder} from '../util/column';
+import {fileToBase64} from '../util/file';
 
 export class RegionView extends BaseView {
     #$rows = [];
@@ -9,19 +10,22 @@ export class RegionView extends BaseView {
     #onSquareDropHandler;
     #onClickHandler;
     #onProductDropHandler;
+    onProductDetailsForm;
 
     #$newProductButton;
     #$unmanagedProductsDropdown;
+    #$productDetailsForm;
 
     #$currentProduct;
 
-    constructor(rowAmount, onDragHandler, onSquareDropHandler, onClickHandler, onProductDropHandler) {
+    constructor(rowAmount, onDragHandler, onSquareDropHandler, onClickHandler, onProductDropHandler, onProductDetailsForm) {
         super();
         this.#rowAmount = rowAmount;
         this.#onDragHandler = onDragHandler;
         this.#onSquareDropHandler = onSquareDropHandler;
         this.#onClickHandler = onClickHandler;
         this.#onProductDropHandler = onProductDropHandler;
+        this.onProductDetailsForm = onProductDetailsForm;
 
         const app = this.getElement('#app');
 
@@ -80,7 +84,13 @@ export class RegionView extends BaseView {
         const squareProduct = square.getProduct();
 
         if (squareProduct) {
-            $square.textContent = squareProduct.getName();
+            const image = squareProduct.getImage();
+
+            if (image) {
+                $square.style.backgroundImage = `url(${image})`;
+            } else {
+                $square.textContent = squareProduct.getName();
+            }
         }
 
         if (square.hasObstacle()) {
@@ -94,6 +104,12 @@ export class RegionView extends BaseView {
         $square.id = `${square.getX()}-${square.getY()}`;
 
         return $square;
+    }
+
+    updateSquare(square) {
+        const $newSquare = this._createSquare(square);
+        const $oldSquare = document.getElementById(`${square.getX()}-${square.getY()}`);
+        $oldSquare.replaceWith($newSquare);
     }
 
     bindNewProductClick(handler) {
@@ -198,4 +214,83 @@ export class RegionView extends BaseView {
         $targetClone.textContent = productName;
         ev.currentTarget.replaceWith($targetClone);
     };
+
+
+    /**
+     * @param {Square} square
+     */
+    showProductEdit(square) {
+        const $div = this.createElement('div', 'product-details');
+        const $header = this.createElement('div', 'product-details-header');
+
+        const $closeButton = this.createElement('span', 'close', 'text-black');
+        $closeButton.textContent = 'X';
+
+        $closeButton.onclick = () => $div.remove();
+
+        const $title = this.createElement('h2');
+
+        const product = square.getProduct();
+
+        $title.textContent = product.getName();
+
+        $header.append($closeButton, $title);
+
+        const $content = this.createElement('div', 'product-details-body');
+
+        const $form = this.createForm(
+            new Input('description', 'text', product.getDescription()),
+            new Input('productImage', 'file'),
+        );
+
+        const $fileInput = $form.querySelector('#productImage');
+        $fileInput.accept = 'image/png, image/jpeg';
+
+        this.#$productDetailsForm = $form;
+
+        const image = product.getImage();
+
+        $fileInput.onchange = async () => {
+            let $productDetails = this.getElement('.product-details-image');
+            const img = await fileToBase64($fileInput.files[0]);
+
+            if ($productDetails) {
+                $productDetails.src = img;
+            } else {
+                const $currentImage = this.createElement('img', 'product-details-image');
+                $currentImage.src = img;
+                $fileInput.parentNode.append($currentImage);
+
+                $productDetails = $currentImage;
+            }
+
+            $productDetails.onclick = () => {
+                $fileInput.value = null;
+                $productDetails.src = '';
+            }
+        };
+
+        if (image) {
+            const $currentImage = this.createElement('img', 'product-details-image');
+            $currentImage.src = image;
+            $fileInput.parentNode.append($currentImage);
+
+            $currentImage.onclick = () => {
+                $fileInput.value = null;
+                $currentImage.src = '';
+            }
+        }
+
+        $form.onsubmit = (ev) => {
+            ev.preventDefault();
+            this.onProductDetailsForm(new FormData(ev.target), product, square);
+        };
+
+        $content.append($form);
+
+        $div.append($header, $content);
+
+        this.$root.prepend($div);
+    }
+
 }

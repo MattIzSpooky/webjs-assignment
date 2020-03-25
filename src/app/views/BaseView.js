@@ -47,17 +47,24 @@ export class BaseView extends Destroyable {
     createForm(...fields) {
         const $form = this.createElement('form');
 
-        for (const {name, type} of fields) {
+        for (const {name, type, defaultValue} of fields) {
             const $inputGroup = this.createElement('div', 'form-group');
 
             const $label = this.createElement('label');
             $label.textContent = name;
             $label.setAttribute('for', name);
 
-            const $input = this.createElement('input', 'form-control');
+            const $input = this.createElement('input');
             $input.type = type;
             $input.id = name;
             $input.name = name;
+            $input.value = defaultValue || '';
+
+            if (type === 'file') {
+                $input.classList.add('form-control-file')
+            } else {
+                $input.classList.add('form-control')
+            }
 
             $inputGroup.append($label, $input);
 
@@ -181,9 +188,11 @@ export class BaseView extends Destroyable {
 export class Input {
     name;
     type;
+    defaultValue;
 
-    constructor(name, type) {
+    constructor(name, type, defaultValue) {
         this.name = name;
         this.type = type;
+        this.defaultValue = defaultValue
     }
 }

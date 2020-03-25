@@ -1,4 +1,4 @@
-import {Product} from "./product";
+import {Product} from './product';
 
 export class Decoration extends Product {
     #color;
@@ -36,7 +36,7 @@ export class Decoration extends Product {
 
     setPackageCount(value) {
         this.checkNegativeValue(value);
-        
+
         this.#packageCount = value;
     }
 
@@ -57,13 +57,18 @@ export class Decoration extends Product {
             color: this.getColor(),
             size: this.getSize(),
             packageCount: this.getPackageCount(),
+            image: this.getImage()
         });
     }
 
     static fromJSON(json) {
         const data = JSON.parse(json);
 
-        return new this(data.name, data.description, data.purchasePrice,
+        const product = new this(data.name, data.description, data.purchasePrice,
             data.minimalStock, data.currentStock, data.color, data.size, data.packageCount);
+
+        product.setImage(data.image);
+
+        return product;
     }
 }
