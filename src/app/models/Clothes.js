@@ -54,7 +54,8 @@ export class Clothes extends Product {
             currentStock: this.getCurrentStock(),
             color: this.getColor(),
             size: this.getSize(),
-            image: this.getImage()
+            image: this.getImage(),
+            customAttributes: this.getCustomAttributes()
         });
     }
 
@@ -65,6 +66,8 @@ export class Clothes extends Product {
             data.minimalStock, data.currentStock, data.color, data.size);
 
         product.setImage(data.image);
+
+        data.customAttributes?.forEach(a => product.addCustomAttribute(a));
 
         return product;
     }

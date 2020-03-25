@@ -57,7 +57,8 @@ export class Decoration extends Product {
             color: this.getColor(),
             size: this.getSize(),
             packageCount: this.getPackageCount(),
-            image: this.getImage()
+            image: this.getImage(),
+            customAttributes: this.getCustomAttributes()
         });
     }
 
@@ -68,6 +69,8 @@ export class Decoration extends Product {
             data.minimalStock, data.currentStock, data.color, data.size, data.packageCount);
 
         product.setImage(data.image);
+
+        data.customAttributes?.forEach(a => product.addCustomAttribute(a));
 
         return product;
     }

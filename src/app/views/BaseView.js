@@ -47,28 +47,8 @@ export class BaseView extends Destroyable {
     createForm(...fields) {
         const $form = this.createElement('form');
 
-        for (const {name, type, defaultValue} of fields) {
-            const $inputGroup = this.createElement('div', 'form-group');
-
-            const $label = this.createElement('label');
-            $label.textContent = name;
-            $label.setAttribute('for', name);
-
-            const $input = this.createElement('input');
-            $input.type = type;
-            $input.id = name;
-            $input.name = name;
-            $input.value = defaultValue || '';
-
-            if (type === 'file') {
-                $input.classList.add('form-control-file')
-            } else {
-                $input.classList.add('form-control')
-            }
-
-            $inputGroup.append($label, $input);
-
-            $form.append($inputGroup);
+        for (const field of fields) {
+            $form.append(this.createInput(field));
         }
 
         const $submitButton = this.createElement('button', 'btn', 'btn-primary');
@@ -78,6 +58,37 @@ export class BaseView extends Destroyable {
         $form.append($submitButton);
 
         return $form;
+    }
+
+    /**
+     *
+     * @param {Input} input
+     */
+    createInput({type, name, defaultValue}) {
+        const $inputGroup = this.createElement('div', 'form-group');
+
+        const $label = this.createElement('label');
+        $label.textContent = name;
+        $label.setAttribute('for', name);
+
+        const $input = this.createElement('input');
+        $input.type = type;
+        $input.id = name;
+        $input.name = name;
+
+        if (defaultValue) {
+            $input.setAttribute('value', defaultValue);
+        }
+
+        if (type === 'file') {
+            $input.classList.add('form-control-file')
+        } else {
+            $input.classList.add('form-control')
+        }
+
+        $inputGroup.append($label, $input);
+
+        return $inputGroup;
     }
 
     createCard(title, ...texts) {

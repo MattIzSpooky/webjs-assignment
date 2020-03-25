@@ -1,5 +1,6 @@
 import {Controller} from '../Controller';
 import {fileToBase64} from '../../util/file';
+import {CustomAttribute} from '../../models/product';
 
 export class BaseRegionController extends Controller {
     constructor() {
@@ -89,6 +90,15 @@ export class BaseRegionController extends Controller {
                 product.setImage(await fileToBase64(imageFile));
             } else {
                 product.setImage(null);
+            }
+
+            product.clearCustomAttributes();
+            // Remove the ones we dont want as custom. we already have their data.
+            formData.delete('description');
+            formData.delete('productImage');
+
+            for (const [key, value] of formData) {
+                product.addCustomAttribute(new CustomAttribute(key, value));
             }
 
             this._model._persist();

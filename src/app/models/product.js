@@ -27,11 +27,15 @@ export class Product {
      * @param {CustomAttribute} attribute
      */
     addCustomAttribute(attribute) {
-        if (this.#customAttributes.some(c => c.getName() === attribute.getName())) {
-            throw new Error(`Duplicate attribute: ${attribute.getName()}`)
+        if (this.#customAttributes.some(c => c.name === attribute.name)) {
+            throw new Error(`Duplicate attribute: ${attribute.name}`)
         }
 
         this.#customAttributes.push(attribute);
+    }
+
+    clearCustomAttributes() {
+        this.#customAttributes = [];
     }
 
     getCustomAttributes() {
@@ -107,28 +111,14 @@ export class Product {
     }
 }
 
+
+// struct
 export class CustomAttribute {
-    #name;
-    #value;
-
-    getName() {
-        return this.#name;
-    }
-
-    setName(name) {
-        this.#name = name;
-    }
-
-    setValue(value) {
-        this.#value = value;
-    }
-
-    getValue() {
-        return this.#value;
-    }
+    name;
+    value;
 
     constructor(name, value) {
-        this.#name = name;
-        this.#value = value;
+        this.name = name;
+        this.value = value;
     }
 }

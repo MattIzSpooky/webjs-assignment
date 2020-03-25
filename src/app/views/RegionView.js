@@ -220,13 +220,23 @@ export class RegionView extends BaseView {
      * @param {Square} square
      */
     showProductEdit(square) {
+        if (this.#$productDetailsForm) {
+            return;
+        }
+
         const $div = this.createElement('div', 'product-details');
+
+        this.#$productDetailsForm = $div;
+
         const $header = this.createElement('div', 'product-details-header');
 
         const $closeButton = this.createElement('span', 'close', 'text-black');
         $closeButton.textContent = 'X';
 
-        $closeButton.onclick = () => $div.remove();
+        $closeButton.onclick = () => {
+            this.#$productDetailsForm.remove();
+            this.#$productDetailsForm = null;
+        };
 
         const $title = this.createElement('h2');
 
@@ -245,8 +255,6 @@ export class RegionView extends BaseView {
 
         const $fileInput = $form.querySelector('#productImage');
         $fileInput.accept = 'image/png, image/jpeg';
-
-        this.#$productDetailsForm = $form;
 
         const image = product.getImage();
 
@@ -286,11 +294,59 @@ export class RegionView extends BaseView {
             this.onProductDetailsForm(new FormData(ev.target), product, square);
         };
 
-        $content.append($form);
+
+        const $customButton = this.createElement('button', 'btn', 'btn-success');
+        $customButton.textContent = 'Add custom field';
+        $customButton.type = 'button';
+
+        let customFieldIndex = 0;
+
+        const customAttributes = product.getCustomAttributes();
+
+        $customButton.onclick = () => {
+            $form.insertBefore(this._createCustomField(`custom-${customFieldIndex}`), $form.lastChild.previousSibling);
+            customFieldIndex++;
+        };
+
+        $form.append($customButton);
+
+        if (customAttributes.length > 0) {
+            const $elements = customAttributes.map(attribute => this._createCustomField(attribute.name, attribute.value));
+            $elements.forEach($e => $form.insertBefore($e, $form.lastChild.previousSibling));
+        }
+
+        const $tip = this.createElement('small');
+        $tip.textContent = `Tip: You can change the custom field's by selecting the name and start typing. The div is contenteditable`;
+
+        $content.append($form, $tip);
 
         $div.append($header, $content);
 
         this.$root.prepend($div);
+    }
+
+    _createCustomField(name, value) {
+        const $customInput = this.createInput(new Input(name, 'text', value));
+
+        const $label = $customInput.firstChild;
+        $label.contentEditable = true;
+
+        $label.addEventListener('input', (ev) => {
+            const nameForInput = ev.target.textContent;
+            $label.setAttribute('for', nameForInput);
+            $customInput.lastChild.previousSibling.name = nameForInput;
+        });
+
+        const $deleteButton = this.createElement('button', 'btn', 'btn-danger');
+        $deleteButton.textContent = 'Remove';
+
+        $deleteButton.onclick = () => {
+            $customInput.remove();
+        };
+
+        $customInput.append($deleteButton);
+
+        return $customInput;
     }
 
 }
