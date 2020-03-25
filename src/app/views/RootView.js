@@ -5,6 +5,7 @@ export class RootView extends BaseView {
     #tierlantineRegionButton;
     #decorationRegionButton;
     #weatherButton;
+    #productsButton;
 
     constructor() {
         super();
@@ -24,7 +25,10 @@ export class RootView extends BaseView {
         this.#weatherButton = this.createElement('button');
         this.#weatherButton.textContent = 'Weather';
 
-        this.$root.append(this._createNavbar(this.#clothesRegionButton, this.#tierlantineRegionButton, this.#decorationRegionButton, this.#weatherButton));
+        this.#productsButton = this.createElement('button');
+        this.#productsButton.textContent = 'Products';
+
+        this.$root.append(this._createNavbar(this.#clothesRegionButton, this.#tierlantineRegionButton, this.#decorationRegionButton, this.#weatherButton, this.#productsButton));
 
         app.append(this.$root);
     }
@@ -72,5 +76,9 @@ export class RootView extends BaseView {
 
     bindClickWeatherButton(handler) {
         this.#weatherButton.onclick = handler;
+    }
+
+    bindClickProductsButton(handler) {
+        this.#productsButton.onclick = handler;
     }
 }
