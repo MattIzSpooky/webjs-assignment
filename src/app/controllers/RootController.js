@@ -19,7 +19,7 @@ export class RootController extends Controller {
         this._view.bindClickTierlantineButton(this.#onClickTiertineRegion);
         this._view.bindClickDecorationButton(this.#onClickDecorationButton);
         this._view.bindClickWeatherButton(this.#onClickWeatherButton);
-        this._view.bindClickProductsButton(this.#onClickProductsButton());
+        this._view.bindClickProductsButton(this.#onClickProductsButton);
     }
 
     _recoverFromUrl() {
