@@ -2,9 +2,19 @@ import {ColumnBuilder} from "../util/column";
 import {BaseWizardView} from "./BaseWizardView";
 
 export class DecorationWizardView extends BaseWizardView {
+    #$form;
+
     constructor(props) {
         super(props);
 
+        this.init();
+
+        this.#$form = this.getElement('#wizard');
+
+        this.showTab(this.currentIndex);
+    }
+
+    init() {
         const app = this.getElement('#app');
 
         const colBuilder = new ColumnBuilder().addType('md');
@@ -31,7 +41,9 @@ export class DecorationWizardView extends BaseWizardView {
         const $buttons = this.renderButtons();
         const $steps = this.renderSteps(3);
 
-        return $wizard.append($header, $defaultTabs, $specificTab, $buttons, $steps)
+        $wizard.append($header, $defaultTabs[0], $defaultTabs[1], $specificTab, $buttons, $steps);
+
+        return $wizard;
     }
 
     renderSpecificTab() {
@@ -47,6 +59,13 @@ export class DecorationWizardView extends BaseWizardView {
         $inputPackageCount.name = 'packageCount';
         $inputPackageCount.placeholder = 'packageCount';
 
-        return this.createElement('div', 'tab').append($inputColor, $inputSize, $inputPackageCount);
+        const $div = this.createElement('div', 'tab');
+        $div.append($inputColor, $inputSize, $inputPackageCount);
+
+        return $div;
+    }
+
+    bindOnFormSubmit(handler) {
+        this.#$form.onsubmit = handler;
     }
 }

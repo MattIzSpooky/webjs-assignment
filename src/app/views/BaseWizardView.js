@@ -1,15 +1,23 @@
 import {BaseView} from "./BaseView";
 
 export class BaseWizardView extends BaseView {
+    currentIndex;
+
     constructor(props) {
         super(props);
+
+        this.currentIndex = 0;
+    }
+
+    init() {
+        throw new Error('init() has to be implemented');
     }
 
     render() {
         throw new Error('render() has to be implemented');
     }
 
-    renderSpecificTabs() {
+    renderSpecificTab() {
         throw new Error('renderSpecificTabs() has to be implemented');
     }
 
@@ -41,27 +49,118 @@ export class BaseWizardView extends BaseView {
     }
 
     renderButtons() {
-        const $prevButton = this.createElement('button');
-        $prevButton.id = 'prevBtn';
-        $prevButton.textContent = 'Previous';
-        const $nextButton = this.createElement('button');
-        $nextButton.id = 'nextBtn';
-        $nextButton.textContent = 'Next';
+        const $prev = this.createElement('button');
+        $prev.id = 'prevBtn';
+        $prev.textContent = 'Previous';
+        $prev.type = 'button';
+        $prev.onclick = () => this.nextPrev(-1);
 
-        const $childDiv = this.createElement('div');
-        $childDiv.append($prevButton, $nextButton);
+        const $next = this.createElement('button');
+        $next.id = 'nextBtn';
+        $next.textContent = 'Next';
+        $next.type = 'button';
+        $next.onclick = () => this.nextPrev(1);
 
-        return this.createElement('div').append($childDiv);
+        const $childDiv = this.createElement('div', 'floatButton');
+        $childDiv.append($prev, $next);
+
+        const $div = this.createElement('div', 'overflow');
+        $div.append($childDiv);
+
+        return $div;
     }
 
     renderSteps(count) {
         const $div = this.createElement('div', 'circles');
-        const $prevButton = this.createElement('span', 'step');
 
-        for (let i = 0; i <= count; i++) {
-            $div.append($prevButton)
+        for (let i = 1; i <= count; i++) {
+            $div.append(this.createElement('span', 'step'))
         }
 
         return $div;
+    }
+
+    showTab(index) {
+        let $tabs = document.getElementsByClassName("tab");
+
+        $tabs[index].style.display = "block";
+
+        if (index === 0) {
+            document.getElementById("prevBtn").style.display = "none";
+        } else {
+            document.getElementById("prevBtn").style.display = "inline";
+        }
+
+        const $next = this.getElement('#nextBtn');
+
+        if (index !== ($tabs.length - 1)) {
+            $next.textContent = 'Next';
+            $next.type = 'button';
+        }
+
+        //... and run a function that will display the correct step indicator:
+        this.fixStepIndicator(index)
+    }
+
+    fixStepIndicator(number) {
+        // This function removes the "active" class of all steps...
+        let $step = document.getElementsByClassName("step");
+
+        for (let i = 0; i < $step.length; i++) {
+            $step[i].className = $step[i].className.replace(" active", "");
+        }
+        //... and adds the "active" class on the current step:
+        $step[number].className += " active";
+    }
+
+    nextPrev(number) {
+        // This function will figure out which tab to display
+        let $tabs = document.getElementsByClassName("tab");
+        // Exit the function if any field in the current tab is invalid:
+        if (number === 1 && !this.validateForm()) return false;
+        // Hide the current tab:
+        $tabs[this.currentIndex].style.display = "none";
+
+        // Increase or decrease the current tab by 1:
+        this.currentIndex = this.currentIndex + number;
+
+        // if you have reached the end of the form...
+        if (this.currentIndex >= $tabs.length) {
+            const $next = this.getElement('#nextBtn');
+            $next.textContent = 'Submit';
+            $next.type = 'submit';
+            $next.click();
+            return false;
+        }
+        // Otherwise, display the correct tab:
+        this.showTab(this.currentIndex);
+    }
+
+    validateForm() {
+        // This function deals with validation of the form fields
+        let $tab, $input, valid = true;
+
+        $tab = document.getElementsByClassName("tab");
+        $input = $tab[this.currentIndex].getElementsByTagName("input");
+
+        // A loop that checks every input field in the current tab:
+        for (let i = 0; i < $input.length; i++) {
+            // If a field is empty...
+            if ($input[i].value === "") {
+                // add an "invalid" class to the field:
+                $input[i].className += " invalid";
+                // and set the current valid status to false
+                valid = false;
+            }
+        }
+        // If the valid status is true, mark the step as finished and valid:
+        if (valid) {
+            document.getElementsByClassName("step")[this.currentIndex].className += " finish";
+        }
+        return valid; // return the valid status
+    }
+
+    bindOnFormSubmit() {
+        throw new Error('render() has to be implemented');
     }
 }
