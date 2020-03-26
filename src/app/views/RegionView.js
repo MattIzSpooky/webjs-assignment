@@ -291,12 +291,6 @@ export class RegionView extends BaseView {
             }
         }
 
-        $form.onsubmit = (ev) => {
-            ev.preventDefault();
-            closeDetails();
-            this.onProductDetailsForm(new FormData(ev.target), product, square);
-        };
-
 
         const $customButton = this.createElement('button', 'btn', 'btn-success');
         $customButton.textContent = 'Add custom field';
@@ -313,6 +307,10 @@ export class RegionView extends BaseView {
 
         $form.append($customButton);
 
+        const $canvasWrapper = this._createCanvas();
+
+        $form.insertBefore($canvasWrapper, $form.lastChild.previousSibling);
+
         if (customAttributes.length > 0) {
             const $elements = customAttributes.map(attribute => this._createCustomField(attribute.name, attribute.value));
             $elements.forEach($e => $form.insertBefore($e, $form.lastChild.previousSibling));
@@ -326,6 +324,87 @@ export class RegionView extends BaseView {
         $div.append($header, $content);
 
         this.$root.prepend($div);
+
+        let mousePressed = false;
+        let lastX, lastY;
+        const $canvas = $canvasWrapper.querySelector('canvas');
+        const $clearButton = $canvasWrapper.lastChild;
+
+        const ctx = $canvas.getContext('2d');
+
+        const signDrawing = product.getSignImage();
+
+        if (signDrawing) {
+            const image = new Image();
+            image.onload = function () {
+                ctx.drawImage(image, 0, 0);
+            };
+            image.src = signDrawing;
+        }
+
+        const draw = (x, y, isDown) => {
+            if (isDown) {
+                ctx.beginPath();
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 2;
+                ctx.lineJoin = 'round';
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.closePath();
+                ctx.stroke();
+            }
+
+            lastX = x;
+            lastY = y;
+        };
+
+        $clearButton.onclick = () => {
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        };
+
+        $canvas.onmousedown = (e) => {
+            mousePressed = true;
+            const rect = $canvas.getBoundingClientRect();
+            draw(e.clientX - rect.left, e.clientY - rect.top, false);
+        };
+
+        $canvas.onmousemove = (e) => {
+            if (mousePressed) {
+                const rect = $canvas.getBoundingClientRect();
+                draw(e.clientX - rect.left, e.clientY - rect.top, true);
+            }
+        };
+
+        $canvas.onmouseup = () => {
+            mousePressed = false;
+        };
+
+        $canvas.onmouseleave = () => {
+            mousePressed = false;
+        };
+
+        $form.onsubmit = (ev) => {
+            ev.preventDefault();
+            closeDetails();
+
+            this.onProductDetailsForm(new FormData(ev.target), product, square, $canvas.toDataURL('image/png'));
+        };
+    }
+
+    _createCanvas() {
+        const $canvasWrapper = this.createElement('div', 'form-group');
+        const $row = this.createRow();
+        $row.classList.add('justify-content-center');
+
+        const $canvas = this.createElement('canvas', 'product-details-canvas');
+        const $clearButton = this.createElement('button', 'btn', 'btn-danger');
+        $clearButton.type = 'button';
+        $clearButton.textContent = 'Clear';
+        $row.append($canvas);
+        $canvasWrapper.append($row, $clearButton);
+
+        return $canvasWrapper;
     }
 
     _createCustomField(name, value) {

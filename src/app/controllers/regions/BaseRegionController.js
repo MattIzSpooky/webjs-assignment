@@ -76,10 +76,11 @@ export class BaseRegionController extends Controller {
     /**
      * @param {FormData} formData
      * @param {Clothes} product
-     *  @param {Square} square
+     * @param {Square} square
+     * @param {String} drawing
      * @returns {Promise<void>}
      */
-    onProductDetailsForm = async (formData, product, square) => {
+    onProductDetailsForm = async (formData, product, square, drawing) => {
         try {
             product.setComment(formData.get('comment'));
 
@@ -90,6 +91,8 @@ export class BaseRegionController extends Controller {
             } else {
                 product.setImage(null);
             }
+
+            product.setSignImage(drawing);
 
             product.clearCustomAttributes();
             // Remove the ones we dont want as custom. we already have their data.
