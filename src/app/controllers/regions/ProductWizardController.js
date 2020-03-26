@@ -7,27 +7,40 @@ export class ProductWizardController extends Controller {
     constructor(props) {
         super(props);
 
-        this._initialize();
-
-        this._view.bindOnFormSubmit(this.#onAddProduct);
+        this._switchScene();
     }
 
-    _initialize() {
-        switch (true) {
+    _switchScene(name) {
+        this.destroy();
+
+        switch (name) {
             case 'clothes':
                 this._view = new ClothesWizardView();
-                // How to init model
+                this._bindEvents();
+                this._view.bindOnFormSubmit(this.#onAddProduct);
                 break;
             case 'tierlantine':
                 this._view = new TierlantineWizardView();
+                this._bindEvents();
+                this._view.bindOnFormSubmit(this.#onAddProduct);
                 break;
             case 'decoration':
                 this._view = new DecorationWizardView();
+                this._bindEvents();
+                this._view.bindOnFormSubmit(this.#onAddProduct);
                 break;
             default:
                 this._view = new ClothesWizardView();
+                this._bindEvents();
+                this._view.bindOnFormSubmit(this.#onAddProduct);
                 break;
         }
+    }
+
+    _bindEvents() {
+        this._view.bindDecorationPageButton(this.#onDecorationPageClick);
+        this._view.bindClothesPageButton(this.#onClothesPageClick);
+        this._view.bindTierlantinePageButton(this.#onTielantinePageClick);
     }
 
     #onAddProduct = (ev) => {
@@ -48,4 +61,19 @@ export class ProductWizardController extends Controller {
         this._view.setCurrentIndex(0);
         this._view.showTab(this._view.getCurrentIndex());
     }
+
+    #onDecorationPageClick = () => {
+        console.log('click Dec');
+        this._switchScene('decoration');
+    };
+
+    #onTielantinePageClick = () => {
+        console.log('click Tier');
+        this._switchScene('tierlantine');
+    };
+
+    #onClothesPageClick = () => {
+        console.log('click Clo');
+        this._switchScene('clothes');
+    };
 }

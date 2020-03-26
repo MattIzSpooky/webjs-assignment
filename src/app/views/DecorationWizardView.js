@@ -39,10 +39,12 @@ export class DecorationWizardView extends BaseWizardView {
         const $inputSize = this.createElement('input', 'mb-2');
         $inputSize.name = 'size';
         $inputSize.placeholder = 'size';
+        $inputSize.type = 'number';
 
         const $inputPackageCount = this.createElement('input', 'mb-2');
         $inputPackageCount.name = 'packageCount';
         $inputPackageCount.placeholder = 'packageCount';
+        $inputPackageCount.type = 'number';
 
         const $div = this.createElement('div', 'tab');
         $div.append($inputColor, $inputSize, $inputPackageCount);

@@ -3,6 +3,9 @@ import {ColumnBuilder} from "../util/column";
 
 export class BaseWizardView extends BaseView {
     currentIndex;
+    #buttonClothes;
+    #buttonDecoration;
+    #buttonTierlantine;
 
     constructor(props) {
         super(props);
@@ -22,12 +25,16 @@ export class BaseWizardView extends BaseView {
         const app = this.getElement('#app');
 
         const colBuilder = new ColumnBuilder().addType('md');
+
+        const $butonColumn = this.createColumn(colBuilder.addWidth(12).getResult());
         const $column = this.createColumn(colBuilder.addWidth(12).getResult());
+
         $column.append(this.render());
+        $butonColumn.append(this.renderNavButtons());
 
         const $row = this.createRow();
 
-        $row.append($column);
+        $row.append($butonColumn, $column);
 
         this.$root.append($row);
         app.append(this.$root);
@@ -72,6 +79,25 @@ export class BaseWizardView extends BaseView {
         $secondTab.append($inputPurchasePrice, $inputMinimalStock, $inputCurrentStock);
 
         return [$firstTab, $secondTab];
+    }
+
+    renderNavButtons() {
+        this.#buttonClothes = this.createElement('button', 'btn', 'btn-primary');
+        this.#buttonClothes.textContent = 'Clothes';
+        this.#buttonClothes.type = 'button';
+
+        this.#buttonTierlantine = this.createElement('button', 'btn', 'btn-primary');
+        this.#buttonTierlantine.textContent = 'Tierlantine';
+        this.#buttonTierlantine.type = 'button';
+
+        this.#buttonDecoration = this.createElement('button', 'btn', 'btn-primary');
+        this.#buttonDecoration.textContent = 'Decoration';
+        this.#buttonDecoration.type = 'button';
+
+        const $div = this.createElement('div');
+        $div.append(this.#buttonClothes, this.#buttonDecoration, this.#buttonTierlantine);
+
+        return $div;
     }
 
     renderButtons() {
@@ -185,5 +211,17 @@ export class BaseWizardView extends BaseView {
 
     bindOnFormSubmit() {
         throw new Error('render() has to be implemented');
+    }
+
+    bindTierlantinePageButton(handler) {
+        this.#buttonTierlantine.onclick = handler;
+    }
+
+    bindClothesPageButton(handler) {
+        this.#buttonClothes.onclick = handler;
+    }
+
+    bindDecorationPageButton(handler) {
+        this.#buttonDecoration.onclick = handler;
     }
 }
