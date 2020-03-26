@@ -39,7 +39,9 @@ export class Clothes extends Product {
         minimalStock: ${this.getMinimalStock()}.\n
         currentStock: ${this.getCurrentStock()}.\n
         color: ${this.getColor()}.\n
-        size: ${this.getSize()}.`;
+        size: ${this.getSize()}.
+        image: ${this.getImage()}
+        `;
     }
 
     toJSON() {
@@ -52,13 +54,21 @@ export class Clothes extends Product {
             currentStock: this.getCurrentStock(),
             color: this.getColor(),
             size: this.getSize(),
+            image: this.getImage(),
+            customAttributes: this.getCustomAttributes()
         });
     }
 
     static fromJSON(json) {
         const data = JSON.parse(json);
 
-        return new this(data.name, data.description, data.purchasePrice,
+        const product = new this(data.name, data.description, data.purchasePrice,
             data.minimalStock, data.currentStock, data.color, data.size);
+
+        product.setImage(data.image);
+
+        data.customAttributes?.forEach(a => product.addCustomAttribute(a));
+
+        return product;
     }
 }
