@@ -11,6 +11,7 @@ export class RegionView extends BaseView {
     #onClickHandler;
     #onProductDropHandler;
     onProductDetailsForm;
+    #onProductDetailsImageClick;
 
     #$newProductButton;
     #$unmanagedProductsDropdown;
@@ -18,7 +19,8 @@ export class RegionView extends BaseView {
 
     #$currentProduct;
 
-    constructor(rowAmount, onDragHandler, onSquareDropHandler, onClickHandler, onProductDropHandler, onProductDetailsForm) {
+// this.onProductDetailsImageClick
+    constructor(rowAmount, onDragHandler, onSquareDropHandler, onClickHandler, onProductDropHandler, onProductDetailsForm, onProductDetailsImageClick) {
         super();
         this.#rowAmount = rowAmount;
         this.#onDragHandler = onDragHandler;
@@ -26,6 +28,7 @@ export class RegionView extends BaseView {
         this.#onClickHandler = onClickHandler;
         this.#onProductDropHandler = onProductDropHandler;
         this.onProductDetailsForm = onProductDetailsForm;
+        this.#onProductDetailsImageClick = onProductDetailsImageClick;
 
         const app = this.getElement('#app');
 
@@ -288,6 +291,7 @@ export class RegionView extends BaseView {
             $currentImage.onclick = () => {
                 $fileInput.value = null;
                 $currentImage.src = '';
+                this.#onProductDetailsImageClick(square);
             }
         }
 
