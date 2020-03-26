@@ -88,8 +88,6 @@ export class BaseRegionController extends Controller {
 
             if (imageFile.size > 0) {
                 product.setImage(await fileToBase64(imageFile));
-            } else {
-                product.setImage(null);
             }
 
             product.setSignImage(drawing);
@@ -109,4 +107,14 @@ export class BaseRegionController extends Controller {
             this.showError(`Error`, e.message);
         }
     };
+
+    onProductDetailsImageClick = (square) => {
+        const product = square.getProduct();
+
+        if (product) {
+            product.setImage(null);
+            this._model._persist();
+            this._view.updateSquare(square);
+        }
+    }
 }
