@@ -12,9 +12,19 @@ export class ProductWizardController extends Controller {
     #onAddProduct = (ev) => {
         ev.preventDefault();
         const form = new FormData(ev.target);
-        console.log(...form);
-        //const city = form.get('city');
 
-        //this.#model.*
+        if (this._view.getCurrentIndex() === 3) {
+            console.log(...form);
+
+            // Model action
+
+            this._reset(ev);
+        }
     };
+
+    _reset(ev) {
+        ev.target.reset();
+        this._view.setCurrentIndex(0);
+        this._view.showTab(this._view.getCurrentIndex());
+    }
 }

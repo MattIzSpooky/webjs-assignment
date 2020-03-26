@@ -9,6 +9,14 @@ export class BaseWizardView extends BaseView {
         this.currentIndex = 0;
     }
 
+    getCurrentIndex() {
+        return this.currentIndex;
+    }
+
+    setCurrentIndex(value) {
+        this.currentIndex = value;
+    }
+
     init() {
         throw new Error('init() has to be implemented');
     }
@@ -80,59 +88,52 @@ export class BaseWizardView extends BaseView {
         return $div;
     }
 
-    showTab(index) {
-        let $tabs = document.getElementsByClassName("tab");
+    showTab(number) {
+        const $tabs = document.getElementsByClassName("tab");
+        if (this.currentIndex !== 3) $tabs[number].style.display = "block";
 
-        $tabs[index].style.display = "block";
-
-        if (index === 0) {
+        if (number === 0) {
             document.getElementById("prevBtn").style.display = "none";
         } else {
             document.getElementById("prevBtn").style.display = "inline";
         }
 
-        const $next = this.getElement('#nextBtn');
-
-        if (index !== ($tabs.length - 1)) {
-            $next.textContent = 'Next';
-            $next.type = 'button';
+        if (number === ($tabs.length - 1)) {
+            document.getElementById("nextBtn").innerHTML = "Submit";
+            document.getElementById("nextBtn").type = "submit";
+        } else {
+            document.getElementById("nextBtn").innerHTML = "Next";
+            if (number !== 3) document.getElementById("nextBtn").type = "button";
         }
 
-        //... and run a function that will display the correct step indicator:
-        this.fixStepIndicator(index)
+        this.fixStepIndicator(number)
     }
 
     fixStepIndicator(number) {
-        // This function removes the "active" class of all steps...
-        let $step = document.getElementsByClassName("step");
+        if (number !== 3) {
+            let $step = document.getElementsByClassName("step");
 
-        for (let i = 0; i < $step.length; i++) {
-            $step[i].className = $step[i].className.replace(" active", "");
+            for (let i = 0; i < $step.length; i++) {
+                $step[i].className = $step[i].className.replace(" active", "");
+            }
+
+            $step[number].className += " active";
         }
-        //... and adds the "active" class on the current step:
-        $step[number].className += " active";
     }
 
     nextPrev(number) {
-        // This function will figure out which tab to display
-        let $tabs = document.getElementsByClassName("tab");
-        // Exit the function if any field in the current tab is invalid:
-        if (number === 1 && !this.validateForm()) return false;
-        // Hide the current tab:
-        $tabs[this.currentIndex].style.display = "none";
+        const $tabs = document.getElementsByClassName("tab");
 
-        // Increase or decrease the current tab by 1:
+        if (number === 1 && !this.validateForm()) return false;
+
+        if (this.currentIndex < 3) $tabs[this.currentIndex].style.display = "none";
+
         this.currentIndex = this.currentIndex + number;
 
-        // if you have reached the end of the form...
         if (this.currentIndex >= $tabs.length) {
-            const $next = this.getElement('#nextBtn');
-            $next.textContent = 'Submit';
-            $next.type = 'submit';
-            $next.click();
-            return false;
+            // End of form
         }
-        // Otherwise, display the correct tab:
+
         this.showTab(this.currentIndex);
     }
 
@@ -140,24 +141,28 @@ export class BaseWizardView extends BaseView {
         // This function deals with validation of the form fields
         let $tab, $input, valid = true;
 
-        $tab = document.getElementsByClassName("tab");
-        $input = $tab[this.currentIndex].getElementsByTagName("input");
+        if (this.currentIndex <= 2) {
+            $tab = document.getElementsByClassName("tab");
+            $input = $tab[this.currentIndex].getElementsByTagName("input");
 
-        // A loop that checks every input field in the current tab:
-        for (let i = 0; i < $input.length; i++) {
-            // If a field is empty...
-            if ($input[i].value === "") {
-                // add an "invalid" class to the field:
-                $input[i].className += " invalid";
-                // and set the current valid status to false
-                valid = false;
+            // A loop that checks every input field in the current tab:
+            for (let i = 0; i < $input.length; i++) {
+                // If a field is empty...
+                if ($input[i].value === "") {
+                    // add an "invalid" class to the field:
+                    $input[i].className += " invalid";
+                    // and set the current valid status to false
+                    valid = false;
+                }
+            }
+
+            // If the valid status is true, mark the step as finished and valid:
+            if (valid) {
+                document.getElementsByClassName("step")[this.currentIndex].className += " finish";
             }
         }
-        // If the valid status is true, mark the step as finished and valid:
-        if (valid) {
-            document.getElementsByClassName("step")[this.currentIndex].className += " finish";
-        }
-        return valid; // return the valid status
+
+        return valid;
     }
 
     bindOnFormSubmit() {
