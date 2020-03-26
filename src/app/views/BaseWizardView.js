@@ -1,4 +1,5 @@
 import {BaseView} from "./BaseView";
+import {ColumnBuilder} from "../util/column";
 
 export class BaseWizardView extends BaseView {
     currentIndex;
@@ -18,7 +19,18 @@ export class BaseWizardView extends BaseView {
     }
 
     init() {
-        throw new Error('init() has to be implemented');
+        const app = this.getElement('#app');
+
+        const colBuilder = new ColumnBuilder().addType('md');
+        const $column = this.createColumn(colBuilder.addWidth(12).getResult());
+        $column.append(this.render());
+
+        const $row = this.createRow();
+
+        $row.append($column);
+
+        this.$root.append($row);
+        app.append(this.$root);
     }
 
     render() {
@@ -43,12 +55,18 @@ export class BaseWizardView extends BaseView {
         const $inputPurchasePrice = this.createElement('input', 'mb-2');
         $inputPurchasePrice.name = 'purchasePrice';
         $inputPurchasePrice.placeholder = 'purchasePrice';
+        $inputPurchasePrice.min = 0;
+        $inputPurchasePrice.type = 'number';
         const $inputMinimalStock = this.createElement('input', 'mb-2');
         $inputMinimalStock.name = 'minimalStock';
         $inputMinimalStock.placeholder = 'minimalStock';
+        $inputMinimalStock.min = 0;
+        $inputMinimalStock.type = 'number';
         const $inputCurrentStock = this.createElement('input', 'mb-2');
         $inputCurrentStock.name = 'currentStock';
         $inputCurrentStock.placeholder = 'currentStock';
+        $inputCurrentStock.min = 0;
+        $inputCurrentStock.type = 'number';
 
         const $secondTab = this.createElement('div', 'tab');
         $secondTab.append($inputPurchasePrice, $inputMinimalStock, $inputCurrentStock);

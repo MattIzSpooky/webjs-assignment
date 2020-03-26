@@ -7,6 +7,7 @@ export class ProductWizardController extends Controller {
 
         this._view = new DecorationWizardView();
         this._view.bindOnFormSubmit(this.#onAddProduct);
+        console.log(this._view);
     }
 
     #onAddProduct = (ev) => {

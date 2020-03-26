@@ -1,6 +1,6 @@
 import {BaseWizardView} from "./BaseWizardView";
 
-export class DecorationWizardView extends BaseWizardView {
+export class ClothesWizardView extends BaseWizardView {
     #$form;
 
     constructor(props) {
@@ -18,7 +18,7 @@ export class DecorationWizardView extends BaseWizardView {
         $wizard.id = 'wizard';
 
         const $header = this.createElement('h2');
-        $header.textContent = 'Decoration';
+        $header.textContent = 'Clothes';
 
         const $defaultTabs = this.renderTabs();
         const $specificTab = this.renderSpecificTab();
@@ -31,21 +31,19 @@ export class DecorationWizardView extends BaseWizardView {
     }
 
     renderSpecificTab() {
-        const $inputColor = this.createElement('input', 'mb-2');
-        $inputColor.name = 'color';
-        $inputColor.placeholder = 'color';
-        $inputColor.type = 'color';
+        const $inputClothesColor = this.createElement('input', 'mb-2');
+        $inputClothesColor.name = 'color';
+        $inputClothesColor.placeholder = 'color';
+        $inputClothesColor.type = 'color';
 
-        const $inputSize = this.createElement('input', 'mb-2');
-        $inputSize.name = 'size';
-        $inputSize.placeholder = 'size';
-
-        const $inputPackageCount = this.createElement('input', 'mb-2');
-        $inputPackageCount.name = 'packageCount';
-        $inputPackageCount.placeholder = 'packageCount';
+        const $inputClothesSize = this.createElement('input', 'mb-2');
+        $inputClothesSize.name = 'size';
+        $inputClothesSize.placeholder = 'size';
+        $inputClothesSize.type = 'number';
+        $inputClothesSize.min = 0;
 
         const $div = this.createElement('div', 'tab');
-        $div.append($inputColor, $inputSize, $inputPackageCount);
+        $div.append($inputClothesColor, $inputClothesSize);
 
         return $div;
     }
