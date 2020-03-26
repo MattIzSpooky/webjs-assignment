@@ -10,6 +10,7 @@ export class Product {
     #image;
 
     #customAttributes = [];
+    #comment;
 
     constructor(name, description, purchasePrice, minimalStock, currentStock) {
         if (new.target === Product) {
@@ -40,6 +41,14 @@ export class Product {
 
     getCustomAttributes() {
         return this.#customAttributes;
+    }
+
+    setComment(comment) {
+        this.#comment = comment;
+    }
+
+    getComment() {
+        return this.#comment;
     }
 
     setImage(image) {

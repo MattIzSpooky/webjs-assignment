@@ -38,7 +38,7 @@ export class RegionView extends BaseView {
         const colBuilder = new ColumnBuilder()
             .addType('md');
 
-        const $regionColumn = this.createColumn(colBuilder.addWidth(7).getResult());
+        const $regionColumn = this.createColumn(colBuilder.addWidth(8).getResult());
         $regionColumn.append(...this.#$rows);
 
         const $productsColumn = this.createColumn(colBuilder.addWidth(3).getResult());
@@ -233,10 +233,12 @@ export class RegionView extends BaseView {
         const $closeButton = this.createElement('span', 'close', 'text-black');
         $closeButton.textContent = 'X';
 
-        $closeButton.onclick = () => {
+        const closeDetails = () => {
             this.#$productDetailsForm.remove();
             this.#$productDetailsForm = null;
         };
+
+        $closeButton.onclick = closeDetails;
 
         const $title = this.createElement('h2');
 
@@ -249,7 +251,7 @@ export class RegionView extends BaseView {
         const $content = this.createElement('div', 'product-details-body');
 
         const $form = this.createForm(
-            new Input('description', 'text', product.getDescription()),
+            new Input('comment', 'text', product.getComment()),
             new Input('productImage', 'file'),
         );
 
@@ -291,6 +293,7 @@ export class RegionView extends BaseView {
 
         $form.onsubmit = (ev) => {
             ev.preventDefault();
+            closeDetails();
             this.onProductDetailsForm(new FormData(ev.target), product, square);
         };
 

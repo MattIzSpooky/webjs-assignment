@@ -33,7 +33,8 @@ export class Tierlantine extends Product {
             currentStock: this.getCurrentStock(),
             weight: this.getWeight(),
             image: this.getImage(),
-            customAttributes: this.getCustomAttributes()
+            customAttributes: this.getCustomAttributes(),
+            comment: this.getComment()
         });
     }
 
@@ -44,6 +45,7 @@ export class Tierlantine extends Product {
             data.minimalStock, data.currentStock, data.weight);
 
         product.setImage(data.image);
+        product.setComment(data.comment);
 
         data.customAttributes?.forEach(a => product.addCustomAttribute(a));
 
