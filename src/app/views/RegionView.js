@@ -2,6 +2,7 @@ import {BaseView, Input} from './BaseView';
 import {ColumnBuilder} from '../util/column';
 import {fileToBase64} from '../util/file';
 import * as JsBarcode from 'jsbarcode';
+import cashSound from '../../assets/sounds/cash.mp3'
 
 export class RegionView extends BaseView {
     #$rows = [];
@@ -398,10 +399,10 @@ export class RegionView extends BaseView {
             mousePressed = false;
         };
 
-        $form.onsubmit = (ev) => {
+        $form.onsubmit = async (ev) => {
             ev.preventDefault();
             closeDetails();
-
+            await new Audio(cashSound).play();
             this.onProductDetailsForm(new FormData(ev.target), product, square, $canvas.toDataURL('image/png'));
         };
     }
