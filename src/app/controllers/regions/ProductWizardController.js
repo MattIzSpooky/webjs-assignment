@@ -1,13 +1,33 @@
 import {Controller} from "../Controller";
 import {DecorationWizardView} from "../../views/DecorationWizardView";
+import {ClothesWizardView} from "../../views/ClothesWizardView";
+import {TierlantineWizardView} from "../../views/TierlantineWizardView";
 
 export class ProductWizardController extends Controller {
     constructor(props) {
         super(props);
 
-        this._view = new DecorationWizardView();
+        this._initialize();
+
         this._view.bindOnFormSubmit(this.#onAddProduct);
-        console.log(this._view);
+    }
+
+    _initialize() {
+        switch (true) {
+            case 'clothes':
+                this._view = new ClothesWizardView();
+                // How to init model
+                break;
+            case 'tierlantine':
+                this._view = new TierlantineWizardView();
+                break;
+            case 'decoration':
+                this._view = new DecorationWizardView();
+                break;
+            default:
+                this._view = new ClothesWizardView();
+                break;
+        }
     }
 
     #onAddProduct = (ev) => {
