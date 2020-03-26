@@ -1,6 +1,7 @@
 import {BaseView, Input} from './BaseView';
 import {ColumnBuilder} from '../util/column';
 import {fileToBase64} from '../util/file';
+import * as JsBarcode from 'jsbarcode';
 
 export class RegionView extends BaseView {
     #$rows = [];
@@ -243,9 +244,18 @@ export class RegionView extends BaseView {
 
         $closeButton.onclick = closeDetails;
 
-        const $title = this.createElement('h2');
-
         const product = square.getProduct();
+
+        const $barcodeRow = this.createRow();
+        $barcodeRow.classList.add('justify-content-center');
+
+        const $barcode = this.createElement('canvas', 'product-details-barcode');
+        JsBarcode($barcode, product.getName());
+
+        $barcodeRow.append($barcode);
+
+
+        const $title = this.createElement('h2');
 
         $title.textContent = product.getName();
 
@@ -325,7 +335,7 @@ export class RegionView extends BaseView {
 
         $content.append($form, $tip);
 
-        $div.append($header, $content);
+        $div.append($header, $barcodeRow, $content);
 
         this.$root.prepend($div);
 

@@ -20,6 +20,11 @@ $width: $height;
     font-size: 3.2rem;
   }
 
+  &-barcode {
+    padding: 2px 16px;
+    text-align: center;
+  }
+
   &-body {
     padding: 2px 16px;
     text-align: center;
