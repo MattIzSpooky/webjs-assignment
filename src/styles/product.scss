@@ -30,6 +30,10 @@ $width: $height;
     max-height: 300px;
   }
 
+  &-canvas {
+    border: 2px solid black;
+  }
+
   .close {
     color: #aaa;
     float: right;

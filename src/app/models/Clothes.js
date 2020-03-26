@@ -56,7 +56,8 @@ export class Clothes extends Product {
             size: this.getSize(),
             image: this.getImage(),
             customAttributes: this.getCustomAttributes(),
-            comment: this.getComment()
+            comment: this.getComment(),
+            signImage: this.getSignImage()
         });
     }
 
@@ -68,6 +69,7 @@ export class Clothes extends Product {
 
         product.setImage(data.image);
         product.setComment(data.comment);
+        product.setSignImage(data.signImage);
 
         data.customAttributes?.forEach(a => product.addCustomAttribute(a));
 

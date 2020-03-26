@@ -59,7 +59,8 @@ export class Decoration extends Product {
             packageCount: this.getPackageCount(),
             image: this.getImage(),
             customAttributes: this.getCustomAttributes(),
-            comment: this.getComment()
+            comment: this.getComment(),
+            signImage: this.getSignImage()
         });
     }
 
@@ -71,6 +72,7 @@ export class Decoration extends Product {
 
         product.setImage(data.image);
         product.setComment(data.comment);
+        product.setSignImage(data.signImage);
 
         data.customAttributes?.forEach(a => product.addCustomAttribute(a));
 
