@@ -47,6 +47,18 @@ module.exports = {
                         }
                     }
                 ]
+            },
+            {
+                test: /\.(mp3)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'assets/sounds'
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -66,7 +78,7 @@ module.exports = {
         new CopyWebpackPlugin(
             [
                 {
-                    from: './src/assets/images', to: 'assets/images'
+                    from: './src/assets', to: 'assets'
                 }
             ]
         ),
