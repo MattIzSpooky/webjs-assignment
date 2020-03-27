@@ -81,7 +81,7 @@ export class Region extends Storable {
     }
 
     _persist() {
-        localStorage.setItem(`${this.#name}-squares`, JSON.stringify(this.#squares.map(square => square.toJSON())));
+        localStorage.setItem(`${this.#name}-squares`, JSON.stringify(this.#squares.map(square => square.toSaveable())));
 
         const products = this.#squares
             .filter(square => !!square.getProduct())
@@ -91,14 +91,12 @@ export class Region extends Storable {
                 return {
                     x: square.getX(),
                     y: square.getY(),
-                    type: product.getType(),
-                    productName: product.getName(),
-                    product: product.toJSON()
+                    product: product.toSaveable()
                 }
             });
 
         localStorage.setItem(`${this.#name}-square-products`, JSON.stringify(products));
-        localStorage.setItem(`${this.#name}-unmanaged`, JSON.stringify(this.#unmanagedProducts.map(product => product.toJSON())));
+        localStorage.setItem(`${this.#name}-unmanaged`, JSON.stringify(this.#unmanagedProducts.map(product => product.toSaveable())));
     }
 
     _recover(obstructionCallBack) {
@@ -107,7 +105,7 @@ export class Region extends Storable {
         const rawSquareProducts = localStorage.getItem(`${this.#name}-square-products`);
 
         if (rawSquares) {
-            this.#squares = JSON.parse(rawSquares).map(rawSquare => Square.fromJSON(rawSquare));
+            this.#squares = JSON.parse(rawSquares).map(rawSquare => Square.fromSaveable(rawSquare));
         } else {
             this._generateSquares(obstructionCallBack);
         }
@@ -115,7 +113,7 @@ export class Region extends Storable {
         const productFactory = new ProductFactory();
 
         if (rawUnmanagedProducts) {
-            this.#unmanagedProducts = JSON.parse(rawUnmanagedProducts).map(rawProduct => productFactory.fromJSON(rawProduct));
+            this.#unmanagedProducts = JSON.parse(rawUnmanagedProducts).map(rawProduct => productFactory.fromSaveable(rawProduct));
         }
 
         if (rawSquareProducts) {
@@ -125,7 +123,7 @@ export class Region extends Storable {
                 const squareProduct = squareProducts.find(sp => sp.x === square.getX() && sp.y === square.getY());
 
                 if (squareProduct) {
-                    square.setProduct(productFactory.fromJSON(squareProduct.product));
+                    square.setProduct(productFactory.fromSaveable(squareProduct.product));
                 }
             })
         }

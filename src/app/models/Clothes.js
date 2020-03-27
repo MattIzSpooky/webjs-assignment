@@ -44,17 +44,15 @@ export class Clothes extends Product {
         `;
     }
 
-    toJSON() {
-        return JSON.stringify({
+    toSaveable() {
+        return {
             ...this._prepareForSave(),
             color: this.getColor(),
             size: this.getSize(),
-        });
+        }
     }
 
-    static fromJSON(json) {
-        const data = JSON.parse(json);
-
+    static fromSaveable(data) {
         const product = new this(data.name, data.description, data.purchasePrice,
             data.minimalStock, data.currentStock, data.color, data.size);
 

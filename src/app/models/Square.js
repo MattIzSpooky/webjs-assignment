@@ -39,6 +39,18 @@ export class Square {
         `;
     }
 
+    toSaveable() {
+        return {
+            x: this.#x,
+            y: this.#y,
+            hasObstacle: this.#hasObstacle
+        }
+    }
+
+    static fromSaveable(data) {
+        return new this(data.x, data.y, data.hasObstacle);
+    }
+
     toJSON() {
         return JSON.stringify({
             x: this.getX(),

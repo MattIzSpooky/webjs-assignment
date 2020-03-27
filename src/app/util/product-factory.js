@@ -3,23 +3,21 @@ import {Tierlantine} from '../models/Tierlantine';
 import {Decoration} from '../models/Decoration';
 
 export class ProductFactory {
-    fromJSON(data) {
-        const product = JSON.parse(data);
-
+    fromSaveable(product) {
         if (!product.type) {
-            throw new Error(`Invalid Product!: ${data}`);
+            throw new Error(`Invalid Product!: ${JSON.stringify(product)}`);
         }
 
         if (product.type === 'Clothes') {
-            return Clothes.fromJSON(data);
+            return Clothes.fromSaveable(product);
         }
 
         if (product.type === 'Tierlantine') {
-            return Tierlantine.fromJSON(data);
+            return Tierlantine.fromSaveable(product);
         }
 
         if (product.type === 'Decoration') {
-            return Decoration.fromJSON(data);
+            return Decoration.fromSaveable(product);
         }
 
         throw new Error('Unknown product type');
