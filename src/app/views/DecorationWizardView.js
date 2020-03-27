@@ -1,4 +1,5 @@
 import {BaseWizardView} from "./BaseWizardView";
+import {Input} from "./BaseView";
 
 export class DecorationWizardView extends BaseWizardView {
     #$form;
@@ -31,20 +32,13 @@ export class DecorationWizardView extends BaseWizardView {
     }
 
     renderSpecificTab() {
-        const $inputColor = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
-        $inputColor.name = 'color';
-        $inputColor.placeholder = 'color';
-        $inputColor.type = 'color';
+        const $inputColor = this.createInput(new Input('color', 'color'));
 
-        const $inputSize = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
-        $inputSize.name = 'size';
-        $inputSize.placeholder = 'size';
-        $inputSize.type = 'number';
+        const $inputSize = this.createInput(new Input('size', 'number'));
+        $inputSize.lastChild.min = 0;
 
-        const $inputPackageCount = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
-        $inputPackageCount.name = 'packageCount';
-        $inputPackageCount.placeholder = 'packageCount';
-        $inputPackageCount.type = 'number';
+        const $inputPackageCount = this.createInput(new Input('packageCount', 'number'));
+        $inputPackageCount.lastChild.min = 0;
 
         const $decorationType = this.createElement('input');
         $decorationType.name = 'type';

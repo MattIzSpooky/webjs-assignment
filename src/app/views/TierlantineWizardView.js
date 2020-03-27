@@ -1,4 +1,5 @@
 import {BaseWizardView} from "./BaseWizardView";
+import {Input} from "./BaseView";
 
 export class TierlantineWizardView extends BaseWizardView {
     #$form;
@@ -31,11 +32,8 @@ export class TierlantineWizardView extends BaseWizardView {
     }
 
     renderSpecificTab() {
-        const $inputWeight = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
-        $inputWeight.name = 'weight';
-        $inputWeight.placeholder = 'weight';
-        $inputWeight.type = 'number';
-        $inputWeight.min = 0;
+        const $inputWeight = this.createInput(new Input('weight', 'number'));
+        $inputWeight.lastChild.min = 0;
 
         const $tierlantineType = this.createElement('input', 'form-control', 'mb-2');
         $tierlantineType.name = 'type';

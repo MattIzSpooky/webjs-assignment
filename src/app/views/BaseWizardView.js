@@ -1,4 +1,4 @@
-import {BaseView} from "./BaseView";
+import {BaseView, Input} from "./BaseView";
 import {ColumnBuilder} from "../util/column";
 
 export class BaseWizardView extends BaseView {
@@ -28,7 +28,7 @@ export class BaseWizardView extends BaseView {
         const colBuilder = new ColumnBuilder().addType('md');
 
         const $butonColumn = this.createColumn(colBuilder.addWidth(12).getResult());
-        const $column = this.createColumn(colBuilder.addWidth(12).getResult());
+        const $column = this.createColumn(colBuilder.getResult());
 
         $column.append(this.render());
         $butonColumn.append(this.renderNavButtons());
@@ -50,33 +50,21 @@ export class BaseWizardView extends BaseView {
     }
 
     renderTabs() {
-        const $inputName = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
-        $inputName.name = 'name';
-        $inputName.placeholder = 'name';
-        const $inputDescription = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
-        $inputDescription.name = 'description';
-        $inputDescription.placeholder = 'description';
+        const $inputName = this.createInput(new Input('name', 'text'));
+        
+        const $inputDescription = this.createInput(new Input('description', 'text'));
 
         const $firstTab = this.createElement('div', 'tab', 'form-group');
         $firstTab.append($inputName, $inputDescription);
 
-        const $inputPurchasePrice = this.createElement('input', 'form-control', 'mb-2');
-        $inputPurchasePrice.name = 'purchasePrice';
-        $inputPurchasePrice.placeholder = 'purchasePrice';
-        $inputPurchasePrice.min = 0;
-        $inputPurchasePrice.type = 'number';
+        const $inputPurchasePrice = this.createInput(new Input('purchasePrice', 'number'));
+        $inputPurchasePrice.lastChild.min = 0;
 
-        const $inputMinimalStock = this.createElement('input', 'form-control', 'mb-2');
-        $inputMinimalStock.name = 'minimalStock';
-        $inputMinimalStock.placeholder = 'minimalStock';
-        $inputMinimalStock.min = 0;
-        $inputMinimalStock.type = 'number';
+        const $inputMinimalStock = this.createInput(new Input('minimalStock', 'number'));
+        $inputMinimalStock.lastChild.min = 0;
 
-        const $inputCurrentStock = this.createElement('input', 'form-control', 'mb-2');
-        $inputCurrentStock.name = 'currentStock';
-        $inputCurrentStock.placeholder = 'currentStock';
-        $inputCurrentStock.min = 0;
-        $inputCurrentStock.type = 'number';
+        const $inputCurrentStock = this.createInput(new Input('currentStock', 'number'));
+        $inputCurrentStock.lastChild.min = 0;
 
         const $secondTab = this.createElement('div', 'tab', 'form-group');
         $secondTab.append($inputPurchasePrice, $inputMinimalStock, $inputCurrentStock);
