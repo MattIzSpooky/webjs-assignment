@@ -2,13 +2,40 @@ import {Controller} from "../Controller";
 import {DecorationWizardView} from "../../views/DecorationWizardView";
 import {ClothesWizardView} from "../../views/ClothesWizardView";
 import {TierlantineWizardView} from "../../views/TierlantineWizardView";
+import {Clothes} from "../../models/Clothes";
 
 export class ProductWizardController extends Controller {
-
     constructor(props) {
         super(props);
 
         this._switchScene();
+    }
+
+    #onAddProduct = (ev) => {
+        ev.preventDefault();
+        const form = new FormData(ev.target);
+
+        if (this._view.getCurrentIndex() === this._view.STEPS) {
+            this._saveProduct(form);
+
+            this._reset(ev);
+        }
+    };
+
+    _saveProduct(form) {
+        let product = new Clothes(form.get('name'),
+            form.get('description'), form.get('purchasePrice'), form.get('minimalStock'),
+            form.get('currencStock'), form.get('color'), form.get('size'));
+
+        product.saveUnmanaged();
+
+        console.log(product);
+    }
+
+    _reset(ev) {
+        ev.target.reset();
+        this._view.setCurrentIndex(0);
+        this._view.showTab(this._view.getCurrentIndex());
     }
 
     _switchScene(name) {
@@ -42,25 +69,6 @@ export class ProductWizardController extends Controller {
         this._view.bindDecorationPageButton(this.#onDecorationPageClick);
         this._view.bindClothesPageButton(this.#onClothesPageClick);
         this._view.bindTierlantinePageButton(this.#onTielantinePageClick);
-    }
-
-    #onAddProduct = (ev) => {
-        ev.preventDefault();
-        const form = new FormData(ev.target);
-
-        if (this._view.getCurrentIndex() === 3) {
-            console.log(...form);
-
-            // Model action
-
-            this._reset(ev);
-        }
-    };
-
-    _reset(ev) {
-        ev.target.reset();
-        this._view.setCurrentIndex(0);
-        this._view.showTab(this._view.getCurrentIndex());
     }
 
     #onDecorationPageClick = () => {

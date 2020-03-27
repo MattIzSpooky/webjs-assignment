@@ -2,6 +2,7 @@ import {BaseView} from "./BaseView";
 import {ColumnBuilder} from "../util/column";
 
 export class BaseWizardView extends BaseView {
+    STEPS;
     currentIndex;
     #buttonClothes;
     #buttonDecoration;
@@ -11,6 +12,7 @@ export class BaseWizardView extends BaseView {
         super(props);
 
         this.currentIndex = 0;
+        this.STEPS = 3;
     }
 
     getCurrentIndex() {
@@ -134,7 +136,7 @@ export class BaseWizardView extends BaseView {
 
     showTab(number) {
         const $tabs = document.getElementsByClassName("tab");
-        if (this.currentIndex !== 3) $tabs[number].style.display = "block";
+        if (this.currentIndex !== this.STEPS) $tabs[number].style.display = "block";
 
         if (number === 0) {
             document.getElementById("prevBtn").style.display = "none";
@@ -154,7 +156,7 @@ export class BaseWizardView extends BaseView {
     }
 
     fixStepIndicator(number) {
-        if (number !== 3) {
+        if (number !== this.STEPS) {
             let $step = document.getElementsByClassName("step");
 
             for (let i = 0; i < $step.length; i++) {
@@ -170,7 +172,7 @@ export class BaseWizardView extends BaseView {
 
         if (number === 1 && !this.validateForm()) return false;
 
-        if (this.currentIndex < 3) $tabs[this.currentIndex].style.display = "none";
+        if (this.currentIndex < this.STEPS) $tabs[this.currentIndex].style.display = "none";
 
         this.currentIndex = this.currentIndex + number;
 
@@ -185,7 +187,7 @@ export class BaseWizardView extends BaseView {
         // This function deals with validation of the form fields
         let $tab, $input, valid = true;
 
-        if (this.currentIndex <= 2) {
+        if (this.currentIndex <= this.STEPS - 1) {
             $tab = document.getElementsByClassName("tab");
             $input = $tab[this.currentIndex].getElementsByTagName("input");
 

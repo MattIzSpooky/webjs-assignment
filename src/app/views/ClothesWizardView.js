@@ -42,8 +42,13 @@ export class ClothesWizardView extends BaseWizardView {
         $inputClothesSize.type = 'number';
         $inputClothesSize.min = 0;
 
+        const $clothesType = this.createElement('input');
+        $clothesType.name = 'type';
+        $clothesType.value = 'clothes';
+        $clothesType.type = 'hidden';
+
         const $div = this.createElement('div', 'tab');
-        $div.append($inputClothesColor, $inputClothesSize);
+        $div.append($inputClothesColor, $inputClothesSize, $clothesType);
 
         return $div;
     }
