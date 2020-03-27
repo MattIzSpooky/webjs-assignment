@@ -127,20 +127,13 @@ export class Product extends Storable {
         }
     }
 
-    toJSON() {
-        throw new Error('Method toJSON() must be implemented.');
-    }
-
-    static fromJSON() {
-        throw new Error('Method fromJSON() must be implemented.');
-    }
 
     _persist() {
         const regionName = this.getType().toLowerCase();
         const squareProducts = JSON.parse(localStorage.getItem(`${regionName}-square-products`));
 
-        const sqIndex = squareProducts.findIndex(sq => sq.type === this.getType() && sq.productName === this.getName());
-        squareProducts[sqIndex].product = this.toJSON();
+        const sqIndex = squareProducts.findIndex(sq => sq.product.type === this.getType() && sq.product.name === this.getName());
+        squareProducts[sqIndex].product = this.toSaveable();
 
         localStorage.setItem(`${regionName}-square-products`, JSON.stringify(squareProducts));
     }
@@ -152,12 +145,12 @@ export class Product extends Storable {
         const sqIndex = unmanaged.findIndex(un => un.name === this.getName());
 
         if (sqIndex === -1) {
-            unmanaged.push(this);
+            unmanaged.push(this.toSaveable());
         } else {
-            unmanaged[sqIndex] = this.toJSON();
+            unmanaged[sqIndex] = this.toSaveable();
         }
 
-        localStorage.setItem(`${regionName}-unmanaged`, JSON.stringify(unmanaged.map(product => JSON.stringify(product))));
+        localStorage.setItem(`${regionName}-unmanaged`, JSON.stringify(unmanaged));
     }
 
     _prepareForSave() {
@@ -173,6 +166,14 @@ export class Product extends Storable {
             comment: this.getComment(),
             signImage: this.getSignImage()
         }
+    }
+
+    toSaveable() {
+        throw new Error('Method toSaveable() must be implemented.');
+    }
+
+    static fromSaveable() {
+        throw new Error('Method fromSaveable() must be implemented.');
     }
 }
 

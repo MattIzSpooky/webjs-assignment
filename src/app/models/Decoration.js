@@ -46,18 +46,16 @@ export class Decoration extends Product {
         size: ${this.getSize()}. packageCount: ${this.getPackageCount()}.`;
     }
 
-    toJSON() {
-        return JSON.stringify({
+    toSaveable() {
+        return {
             ...this._prepareForSave(),
             color: this.getColor(),
             size: this.getSize(),
             packageCount: this.getPackageCount(),
-        });
+        }
     }
 
-    static fromJSON(json) {
-        const data = JSON.parse(json);
-
+    static fromSaveable(data) {
         const product = new this(data.name, data.description, data.purchasePrice,
             data.minimalStock, data.currentStock, data.color, data.size, data.packageCount);
 
