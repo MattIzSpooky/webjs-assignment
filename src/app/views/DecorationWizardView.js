@@ -26,7 +26,7 @@ export class DecorationWizardView extends BaseWizardView {
         const $buttons = this.renderButtons();
         const $steps = this.renderSteps(3);
 
-        $wizard.append($header, $defaultTabs[0], $defaultTabs[1], $specificTab, $buttons, $steps);
+        $wizard.append($header, ...$defaultTabs, $specificTab, $buttons, $steps);
 
         return $wizard;
     }

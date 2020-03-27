@@ -51,7 +51,7 @@ export class BaseWizardView extends BaseView {
 
     renderTabs() {
         const $inputName = this.createInput(new Input('name', 'text'));
-        
+
         const $inputDescription = this.createInput(new Input('description', 'text'));
 
         const $firstTab = this.createElement('div', 'tab', 'form-group');
@@ -150,10 +150,10 @@ export class BaseWizardView extends BaseView {
             let $step = document.getElementsByClassName("step");
 
             for (let i = 0; i < $step.length; i++) {
-                $step[i].className = $step[i].className.replace(" active", "");
+                $step[i].classList.remove('active');
             }
 
-            $step[number].className += " active";
+            $step[number].classList.add('active');
         }
     }
 
@@ -165,10 +165,6 @@ export class BaseWizardView extends BaseView {
         if (this.currentIndex < BaseWizardView.STEPS) $tabs[this.currentIndex].style.display = "none";
 
         this.currentIndex = this.currentIndex + number;
-
-        if (this.currentIndex >= $tabs.length) {
-            // End of form
-        }
 
         this.showTab(this.currentIndex);
     }
@@ -186,7 +182,7 @@ export class BaseWizardView extends BaseView {
                 // If a field is empty...
                 if ($input[i].value === "" || $input[i].value < 0) {
                     // add an "invalid" class to the field:
-                    $input[i].className += " invalid";
+                    $input[i].classList.add('invalid');
                     // and set the current valid status to false
                     valid = false;
                 }
