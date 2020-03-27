@@ -1,5 +1,5 @@
-import {BaseView, Input} from "./BaseView";
-import {ColumnBuilder} from "../util/column";
+import {BaseView, Input} from './BaseView';
+import {ColumnBuilder} from '../util/column';
 
 export class BaseWizardView extends BaseView {
     static STEPS = 3;
@@ -125,21 +125,21 @@ export class BaseWizardView extends BaseView {
     }
 
     showTab(number) {
-        const $tabs = document.getElementsByClassName("tab");
-        if (this.currentIndex !== BaseWizardView.STEPS) $tabs[number].style.display = "block";
+        const $tabs = document.getElementsByClassName('tab');
+        if (this.currentIndex !== BaseWizardView.STEPS) $tabs[number].style.display = 'block';
 
         if (number === 0) {
-            document.getElementById("prevBtn").style.display = "none";
+            document.getElementById('prevBtn').style.display = 'none';
         } else {
-            document.getElementById("prevBtn").style.display = "inline";
+            document.getElementById('prevBtn').style.display = 'inline';
         }
 
         if (number === ($tabs.length - 1)) {
-            document.getElementById("nextBtn").innerHTML = "Submit";
-            document.getElementById("nextBtn").type = "submit";
+            document.getElementById('nextBtn').innerHTML = 'Submit';
+            document.getElementById('nextBtn').type = 'submit';
         } else {
-            document.getElementById("nextBtn").innerHTML = "Next";
-            if (number !== 3) document.getElementById("nextBtn").type = "button";
+            document.getElementById('nextBtn').innerHTML = 'Next';
+            if (number !== 3) document.getElementById('nextBtn').type = 'button';
         }
 
         this.fixStepIndicator(number)
@@ -147,7 +147,7 @@ export class BaseWizardView extends BaseView {
 
     fixStepIndicator(number) {
         if (number !== BaseWizardView.STEPS) {
-            let $step = document.getElementsByClassName("step");
+            const $step = document.getElementsByClassName('step');
 
             for (let i = 0; i < $step.length; i++) {
                 $step[i].classList.remove('active');
@@ -158,11 +158,11 @@ export class BaseWizardView extends BaseView {
     }
 
     nextPrev(number) {
-        const $tabs = document.getElementsByClassName("tab");
+        const $tabs = document.getElementsByClassName('tab');
 
         if (number === 1 && !this.validateForm()) return false;
 
-        if (this.currentIndex < BaseWizardView.STEPS) $tabs[this.currentIndex].style.display = "none";
+        if (this.currentIndex < BaseWizardView.STEPS) $tabs[this.currentIndex].style.display = 'none';
 
         this.currentIndex = this.currentIndex + number;
 
@@ -171,16 +171,16 @@ export class BaseWizardView extends BaseView {
 
     validateForm() {
         // This function deals with validation of the form fields
-        let $tab, $input, valid = true;
+        let valid = true;
 
         if (this.currentIndex <= BaseWizardView.STEPS - 1) {
-            $tab = document.getElementsByClassName("tab");
-            $input = $tab[this.currentIndex].getElementsByTagName("input");
+            const $tab = document.getElementsByClassName('tab');
+            const $input = $tab[this.currentIndex].getElementsByTagName('input');
 
             // A loop that checks every input field in the current tab:
             for (let i = 0; i < $input.length; i++) {
                 // If a field is empty...
-                if ($input[i].value === "" || $input[i].value < 0) {
+                if ($input[i].value === '' || $input[i].value < 0) {
                     // add an "invalid" class to the field:
                     $input[i].classList.add('invalid');
                     // and set the current valid status to false
@@ -190,7 +190,7 @@ export class BaseWizardView extends BaseView {
 
             // If the valid status is true, mark the step as finished and valid:
             if (valid) {
-                document.getElementsByClassName("step")[this.currentIndex].className += " finish";
+                document.getElementsByClassName('step')[this.currentIndex].className += ' finish';
             }
         }
 

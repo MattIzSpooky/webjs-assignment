@@ -140,7 +140,7 @@ export class Product extends Storable {
 
     saveUnmanaged() {
         const regionName = this.getType().toLowerCase();
-        const unmanaged = JSON.parse(localStorage.getItem(`${regionName}-unmanaged`));
+        const unmanaged = JSON.parse(localStorage.getItem(`${regionName}-unmanaged`)) || [];
 
         const sqIndex = unmanaged.findIndex(un => un.name === this.getName());
 
