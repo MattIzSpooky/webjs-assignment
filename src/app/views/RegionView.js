@@ -1,6 +1,8 @@
 import {BaseView, Input} from './BaseView';
 import {ColumnBuilder} from '../util/column';
 import {fileToBase64} from '../util/file';
+import * as JsBarcode from 'jsbarcode';
+import cashSound from '../../assets/sounds/cash.mp3'
 
 export class RegionView extends BaseView {
     #$rows = [];
@@ -11,6 +13,7 @@ export class RegionView extends BaseView {
     #onClickHandler;
     #onProductDropHandler;
     onProductDetailsForm;
+    #onProductDetailsImageClick;
 
     #$newProductButton;
     #$unmanagedProductsDropdown;
@@ -18,7 +21,8 @@ export class RegionView extends BaseView {
 
     #$currentProduct;
 
-    constructor(rowAmount, onDragHandler, onSquareDropHandler, onClickHandler, onProductDropHandler, onProductDetailsForm) {
+// this.onProductDetailsImageClick
+    constructor(rowAmount, onDragHandler, onSquareDropHandler, onClickHandler, onProductDropHandler, onProductDetailsForm, onProductDetailsImageClick) {
         super();
         this.#rowAmount = rowAmount;
         this.#onDragHandler = onDragHandler;
@@ -26,6 +30,7 @@ export class RegionView extends BaseView {
         this.#onClickHandler = onClickHandler;
         this.#onProductDropHandler = onProductDropHandler;
         this.onProductDetailsForm = onProductDetailsForm;
+        this.#onProductDetailsImageClick = onProductDetailsImageClick;
 
         const app = this.getElement('#app');
 
@@ -38,7 +43,7 @@ export class RegionView extends BaseView {
         const colBuilder = new ColumnBuilder()
             .addType('md');
 
-        const $regionColumn = this.createColumn(colBuilder.addWidth(7).getResult());
+        const $regionColumn = this.createColumn(colBuilder.addWidth(8).getResult());
         $regionColumn.append(...this.#$rows);
 
         const $productsColumn = this.createColumn(colBuilder.addWidth(3).getResult());
@@ -233,14 +238,25 @@ export class RegionView extends BaseView {
         const $closeButton = this.createElement('span', 'close', 'text-black');
         $closeButton.textContent = 'X';
 
-        $closeButton.onclick = () => {
+        const closeDetails = () => {
             this.#$productDetailsForm.remove();
             this.#$productDetailsForm = null;
         };
 
-        const $title = this.createElement('h2');
+        $closeButton.onclick = closeDetails;
 
         const product = square.getProduct();
+
+        const $barcodeRow = this.createRow();
+        $barcodeRow.classList.add('justify-content-center');
+
+        const $barcode = this.createElement('canvas', 'product-details-barcode');
+        JsBarcode($barcode, product.getName());
+
+        $barcodeRow.append($barcode);
+
+
+        const $title = this.createElement('h2');
 
         $title.textContent = product.getName();
 
@@ -249,7 +265,7 @@ export class RegionView extends BaseView {
         const $content = this.createElement('div', 'product-details-body');
 
         const $form = this.createForm(
-            new Input('description', 'text', product.getDescription()),
+            new Input('comment', 'text', product.getComment()),
             new Input('productImage', 'file'),
         );
 
@@ -286,13 +302,9 @@ export class RegionView extends BaseView {
             $currentImage.onclick = () => {
                 $fileInput.value = null;
                 $currentImage.src = '';
+                this.#onProductDetailsImageClick(square);
             }
         }
-
-        $form.onsubmit = (ev) => {
-            ev.preventDefault();
-            this.onProductDetailsForm(new FormData(ev.target), product, square);
-        };
 
 
         const $customButton = this.createElement('button', 'btn', 'btn-success');
@@ -310,6 +322,10 @@ export class RegionView extends BaseView {
 
         $form.append($customButton);
 
+        const $canvasWrapper = this._createCanvas();
+
+        $form.insertBefore($canvasWrapper, $form.lastChild.previousSibling);
+
         if (customAttributes.length > 0) {
             const $elements = customAttributes.map(attribute => this._createCustomField(attribute.name, attribute.value));
             $elements.forEach($e => $form.insertBefore($e, $form.lastChild.previousSibling));
@@ -320,9 +336,90 @@ export class RegionView extends BaseView {
 
         $content.append($form, $tip);
 
-        $div.append($header, $content);
+        $div.append($header, $barcodeRow, $content);
 
         this.$root.prepend($div);
+
+        let mousePressed = false;
+        let lastX, lastY;
+        const $canvas = $canvasWrapper.querySelector('canvas');
+        const $clearButton = $canvasWrapper.lastChild;
+
+        const ctx = $canvas.getContext('2d');
+
+        const signDrawing = product.getSignImage();
+
+        if (signDrawing) {
+            const image = new Image();
+            image.onload = function () {
+                ctx.drawImage(image, 0, 0);
+            };
+            image.src = signDrawing;
+        }
+
+        const draw = (x, y, isDown) => {
+            if (isDown) {
+                ctx.beginPath();
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 2;
+                ctx.lineJoin = 'round';
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.closePath();
+                ctx.stroke();
+            }
+
+            lastX = x;
+            lastY = y;
+        };
+
+        $clearButton.onclick = () => {
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        };
+
+        $canvas.onmousedown = (e) => {
+            mousePressed = true;
+            const rect = $canvas.getBoundingClientRect();
+            draw(e.clientX - rect.left, e.clientY - rect.top, false);
+        };
+
+        $canvas.onmousemove = (e) => {
+            if (mousePressed) {
+                const rect = $canvas.getBoundingClientRect();
+                draw(e.clientX - rect.left, e.clientY - rect.top, true);
+            }
+        };
+
+        $canvas.onmouseup = () => {
+            mousePressed = false;
+        };
+
+        $canvas.onmouseleave = () => {
+            mousePressed = false;
+        };
+
+        $form.onsubmit = async (ev) => {
+            ev.preventDefault();
+            closeDetails();
+            await new Audio(cashSound).play();
+            this.onProductDetailsForm(new FormData(ev.target), product, square, $canvas.toDataURL('image/png'));
+        };
+    }
+
+    _createCanvas() {
+        const $canvasWrapper = this.createElement('div', 'form-group');
+        const $row = this.createRow();
+        $row.classList.add('justify-content-center');
+
+        const $canvas = this.createElement('canvas', 'product-details-canvas');
+        const $clearButton = this.createElement('button', 'btn', 'btn-danger');
+        $clearButton.type = 'button';
+        $clearButton.textContent = 'Clear';
+        $row.append($canvas);
+        $canvasWrapper.append($row, $clearButton);
+
+        return $canvasWrapper;
     }
 
     _createCustomField(name, value) {

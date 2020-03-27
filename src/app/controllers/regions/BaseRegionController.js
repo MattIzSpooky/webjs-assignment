@@ -74,27 +74,27 @@ export class BaseRegionController extends Controller {
     }
 
     /**
-     *
      * @param {FormData} formData
      * @param {Clothes} product
-     *  @param {Square} square
+     * @param {Square} square
+     * @param {String} drawing
      * @returns {Promise<void>}
      */
-    onProductDetailsForm = async (formData, product, square) => {
+    onProductDetailsForm = async (formData, product, square, drawing) => {
         try {
-            product.setDescription(formData.get('description'));
+            product.setComment(formData.get('comment'));
 
             const imageFile = formData.get('productImage');
 
             if (imageFile.size > 0) {
                 product.setImage(await fileToBase64(imageFile));
-            } else {
-                product.setImage(null);
             }
+
+            product.setSignImage(drawing);
 
             product.clearCustomAttributes();
             // Remove the ones we dont want as custom. we already have their data.
-            formData.delete('description');
+            formData.delete('comment');
             formData.delete('productImage');
 
             for (const [key, value] of formData) {
@@ -107,4 +107,14 @@ export class BaseRegionController extends Controller {
             this.showError(`Error`, e.message);
         }
     };
+
+    onProductDetailsImageClick = (square) => {
+        const product = square.getProduct();
+
+        if (product) {
+            product.setImage(null);
+            this._model._persist();
+            this._view.updateSquare(square);
+        }
+    }
 }
