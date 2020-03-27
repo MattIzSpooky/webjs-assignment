@@ -3,6 +3,8 @@ import {DecorationWizardView} from "../../views/DecorationWizardView";
 import {ClothesWizardView} from "../../views/ClothesWizardView";
 import {TierlantineWizardView} from "../../views/TierlantineWizardView";
 import {Clothes} from "../../models/Clothes";
+import {Decoration} from "../../models/Decoration";
+import {Tierlantine} from "../../models/Tierlantine";
 
 export class ProductWizardController extends Controller {
     constructor(props) {
@@ -23,13 +25,28 @@ export class ProductWizardController extends Controller {
     };
 
     _saveProduct(form) {
-        let product = new Clothes(form.get('name'),
-            form.get('description'), form.get('purchasePrice'), form.get('minimalStock'),
-            form.get('currencStock'), form.get('color'), form.get('size'));
+        let product = null;
 
-        product.saveUnmanaged();
-
-        console.log(product);
+        switch (form.get('type')) {
+            case 'clothes':
+                product = new Clothes(form.get('name'),
+                    form.get('description'), form.get('purchasePrice'), form.get('minimalStock'),
+                    form.get('currentStock'), form.get('color'), form.get('size'));
+                product.saveUnmanaged();
+                break;
+            case 'decoration':
+                product = new Decoration(form.get('name'),
+                    form.get('description'), form.get('purchasePrice'), form.get('minimalStock'),
+                    form.get('currentStock'), form.get('color'), form.get('size'), form.get('packageCount'));
+                product.saveUnmanaged();
+                break;
+            case 'tierlantine':
+                product = new Tierlantine(form.get('name'),
+                    form.get('description'), form.get('purchasePrice'), form.get('minimalStock'),
+                    form.get('currentStock'), form.get('weight'));
+                product.saveUnmanaged();
+                break;
+        }
     }
 
     _reset(ev) {
