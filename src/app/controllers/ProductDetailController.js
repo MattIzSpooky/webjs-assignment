@@ -7,11 +7,11 @@ export class ProductDetailController extends Controller {
     #product;
     #updateSquareInViewCallback;
 
-    constructor(region, product, updateSquareInViewCallback) {
+    constructor(region, product, onProductUpdated) {
         super();
         this._model = region;
         this.#product = product;
-        this.updateSquareInViewCallback = updateSquareInViewCallback;
+        this.updateSquareInViewCallback = onProductUpdated;
         this._view = new ProductDetailView(product, this.#onProductDetailsForm, this.#onClose, this.#onProductDetailsImageClick);
     }
 
@@ -47,7 +47,7 @@ export class ProductDetailController extends Controller {
                 this.#product.addCustomAttribute(new CustomAttribute(key, value));
             }
 
-            this.#product._persist(this._model.getName());
+            this.#product._persist();
             this.updateSquareInViewCallback();
         } catch (e) {
             this.showError(`Error`, e.message);

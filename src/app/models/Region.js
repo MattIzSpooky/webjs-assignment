@@ -9,10 +9,6 @@ export class Region extends Storable {
 
     static AMOUNT_OF_ROWS = 15;
 
-    getName() {
-        return this.#name;
-    }
-
     getSquares() {
         return this.#squares.sort((a, b) => a.getX() - b.getX());
     }
