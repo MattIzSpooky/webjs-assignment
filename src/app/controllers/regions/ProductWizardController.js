@@ -4,6 +4,7 @@ import {ClothesWizardView} from "../../views/ClothesWizardView";
 import {TierlantineWizardView} from "../../views/TierlantineWizardView";
 
 export class ProductWizardController extends Controller {
+
     constructor(props) {
         super(props);
 
@@ -63,17 +64,14 @@ export class ProductWizardController extends Controller {
     }
 
     #onDecorationPageClick = () => {
-        console.log('click Dec');
         this._switchScene('decoration');
     };
 
     #onTielantinePageClick = () => {
-        console.log('click Tier');
         this._switchScene('tierlantine');
     };
 
     #onClothesPageClick = () => {
-        console.log('click Clo');
         this._switchScene('clothes');
     };
 }
