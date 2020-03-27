@@ -14,6 +14,7 @@ export class ProductDetailView extends BaseView {
         super();
 
         this.showProductEdit(product);
+
         this.#onProductDetailsForm = onProductDetailsForm;
         this.#onClose = onClose;
         this.#onProductDetailsImageClick = onProductDetailsImageClick;
@@ -46,12 +47,13 @@ export class ProductDetailView extends BaseView {
 
         $barcodeRow.append($barcode);
 
-
         const $title = this.createElement('h2');
 
         $title.textContent = product.getName();
 
         $header.append($closeButton, $title);
+
+        const $modal = this.createModal();
 
         const $content = this.createElement('div', 'product-details-body');
 
@@ -127,10 +129,43 @@ export class ProductDetailView extends BaseView {
 
         $content.append($form, $tip);
 
-        $div.append($header, $barcodeRow, $content);
+        $modal.firstChild.append($header, $barcodeRow, $content);
+
+        $div.append($modal);
 
         this.$root.prepend($div);
 
+        this._bindCanvasLogic(product, $canvasWrapper);
+
+        $form.onsubmit = async (ev) => {
+            ev.preventDefault();
+            await new Audio(cashSound).play();
+            await this.#onProductDetailsForm(new FormData(ev.target), $canvasWrapper.firstChild.firstChild.toDataURL('image/png'));
+
+            this.#onClose();
+        };
+
+        const app = this.getElement('#app');
+
+        app.prepend(this.$root);
+    }
+
+    _createCanvas() {
+        const $canvasWrapper = this.createElement('div', 'form-group');
+        const $row = this.createRow();
+        $row.classList.add('justify-content-center');
+
+        const $canvas = this.createElement('canvas', 'product-details-canvas');
+        const $clearButton = this.createElement('button', 'btn', 'btn-danger');
+        $clearButton.type = 'button';
+        $clearButton.textContent = 'Clear';
+        $row.append($canvas);
+        $canvasWrapper.append($row, $clearButton);
+
+        return $canvasWrapper;
+    }
+
+    _bindCanvasLogic(product, $canvasWrapper) {
         let mousePressed = false;
         let lastX, lastY;
         const $canvas = $canvasWrapper.querySelector('canvas');
@@ -142,9 +177,7 @@ export class ProductDetailView extends BaseView {
 
         if (signDrawing) {
             const image = new Image();
-            image.onload = function () {
-                ctx.drawImage(image, 0, 0);
-            };
+            image.onload = () => ctx.drawImage(image, 0, 0);
             image.src = signDrawing;
         }
 
@@ -189,34 +222,6 @@ export class ProductDetailView extends BaseView {
         $canvas.onmouseleave = () => {
             mousePressed = false;
         };
-
-        $form.onsubmit = async (ev) => {
-            ev.preventDefault();
-
-            await new Audio(cashSound).play();
-            await this.#onProductDetailsForm(new FormData(ev.target), $canvas.toDataURL('image/png'));
-
-            this.#onClose();
-        };
-
-        const app = this.getElement('#app');
-
-        app.prepend(this.$root);
-    }
-
-    _createCanvas() {
-        const $canvasWrapper = this.createElement('div', 'form-group');
-        const $row = this.createRow();
-        $row.classList.add('justify-content-center');
-
-        const $canvas = this.createElement('canvas', 'product-details-canvas');
-        const $clearButton = this.createElement('button', 'btn', 'btn-danger');
-        $clearButton.type = 'button';
-        $clearButton.textContent = 'Clear';
-        $row.append($canvas);
-        $canvasWrapper.append($row, $clearButton);
-
-        return $canvasWrapper;
     }
 
     _createCustomField(name, value) {

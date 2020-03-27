@@ -70,7 +70,7 @@ export class RegionView extends BaseView {
             if (image) {
                 $square.style.backgroundImage = `url(${image})`;
             } else {
-                $square.textContent = squareProduct.getName();
+                $square.textContent = squareProduct.getName().substring(0, 5).toUpperCase();
             }
         }
 
@@ -110,6 +110,10 @@ export class RegionView extends BaseView {
 
         const $draggedElementClone = $draggedElement.cloneNode(true);
         const $targetClone = ev.currentTarget.cloneNode(true);
+
+        if (!/product|square/.test($draggedElement.dataset.type)) {
+            return;
+        }
 
         const xTarget = +ev.currentTarget.dataset.x;
         const yTarget = +ev.currentTarget.dataset.y;

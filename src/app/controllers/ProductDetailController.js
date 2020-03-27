@@ -28,7 +28,6 @@ export class ProductDetailController extends Controller {
      */
     #onProductDetailsForm = async (formData, drawing) => {
         try {
-            console.log(this.#product.toString());
             this.#product.setComment(formData.get('comment'));
 
             const imageFile = formData.get('productImage');
