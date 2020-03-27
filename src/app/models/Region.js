@@ -9,6 +9,10 @@ export class Region extends Storable {
 
     static AMOUNT_OF_ROWS = 15;
 
+    getName() {
+        return this.#name;
+    }
+
     getSquares() {
         return this.#squares.sort((a, b) => a.getX() - b.getX());
     }
@@ -33,6 +37,8 @@ export class Region extends Storable {
                 this.#squares.push(new Square(x, y, obstructionCallBack(x, y)));
             }
         }
+
+        this._persist();
     }
 
     /**
@@ -80,12 +86,29 @@ export class Region extends Storable {
 
     _persist() {
         localStorage.setItem(`${this.#name}-squares`, JSON.stringify(this.#squares.map(square => square.toJSON())));
+
+        const products = this.#squares
+            .filter(square => !!square.getProduct())
+            .map(square => {
+                const product = square.getProduct();
+
+                return {
+                    x: square.getX(),
+                    y: square.getY(),
+                    type: product.getType(),
+                    productName: product.getName(),
+                    product: product.toJSON()
+                }
+            });
+
+        localStorage.setItem(`${this.#name}-square-products`, JSON.stringify(products));
         localStorage.setItem(`${this.#name}-unmanaged`, JSON.stringify(this.#unmanagedProducts.map(product => product.toJSON())));
     }
 
     _recover(obstructionCallBack) {
         const rawSquares = localStorage.getItem(`${this.#name}-squares`);
         const rawUnmanagedProducts = localStorage.getItem(`${this.#name}-unmanaged`);
+        const rawSquareProducts = localStorage.getItem(`${this.#name}-square-products`);
 
         if (rawSquares) {
             this.#squares = JSON.parse(rawSquares).map(rawSquare => Square.fromJSON(rawSquare));
@@ -93,9 +116,22 @@ export class Region extends Storable {
             this._generateSquares(obstructionCallBack);
         }
 
+        const productFactory = new ProductFactory();
+
         if (rawUnmanagedProducts) {
-            const productFactory = new ProductFactory();
             this.#unmanagedProducts = JSON.parse(rawUnmanagedProducts).map(rawProduct => productFactory.fromJSON(rawProduct));
+        }
+
+        if (rawSquareProducts) {
+            const squareProducts = JSON.parse(rawSquareProducts);
+
+            this.#squares.forEach(square => {
+                const squareProduct = squareProducts.find(sp => sp.x === square.getX() && sp.y === square.getY());
+
+                if (squareProduct) {
+                    square.setProduct(productFactory.fromJSON(squareProduct.product));
+                }
+            })
         }
     }
 }
