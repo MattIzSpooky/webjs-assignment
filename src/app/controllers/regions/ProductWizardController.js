@@ -20,6 +20,8 @@ export class ProductWizardController extends Controller {
         if (this._view.getCurrentIndex() === this._view.STEPS) {
             this._saveProduct(form);
 
+            this.showSucceed('Succesfull stored');
+
             this._reset(ev);
         }
     };

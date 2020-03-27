@@ -124,6 +124,26 @@ export class BaseView extends Destroyable {
         this.$root.remove();
     }
 
+    showSucceedModal(message) {
+        const $modal = this.createModal();
+        const $messageBox = this.createElement('div', 'my-modal-header-succeed');
+        const $closeBtn = this.createElement('span', 'close', 'text-black');
+        $closeBtn.textContent = 'X';
+
+        $closeBtn.onclick = () => $modal.remove();
+
+        const $title = this.createElement('h2');
+        $title.textContent = message;
+
+        $messageBox.append($closeBtn, $title);
+
+        $modal.firstChild.append($messageBox);
+
+        const app = this.getElement('#app');
+
+        app.prepend($modal);
+    }
+
     showErrorModal(title, message) {
         const $modal = this.createModal();
 
@@ -166,43 +186,6 @@ export class BaseView extends Destroyable {
 
         return $modal;
     }
-
-    // createErrorModal() {
-    //     let modalButtonSpan = this.createElement('span');
-    //     let modalButton = this.createElement('button', 'close');
-    //     let modalTitle = this.createElement('h5', 'modal-title');
-    //     let modalHeader = this.createElement('div', 'modal-header');
-    //     let modalBody = this.createElement('div', 'modal-body');
-    //     let modelContent = this.createElement('div', 'modal-content');
-    //     let modalDialog = this.createElement('div', 'modal-dialog', 'modal-sm');
-    //     let modal = this.createElement('div', 'modal', 'fade');
-    //
-    //     modalTitle.id = 'modalLabel';
-    //     modalBody.id = 'modalBody';
-    //     modal.id = 'modal';
-    //
-    //     modalButton.dataset.dismiss = 'modal';
-    //     modalButton.setAttribute('aria-label', 'Close');
-    //     modalButtonSpan.setAttribute('aria-hidden', 'true');
-    //     modalButtonSpan.innerText = '&times;';
-    //
-    //     modal.setAttribute('role', 'dialog');
-    //     modal.setAttribute('tabindex', '-1');
-    //     modal.setAttribute('aria-labelledby', 'errorModalLabel');
-    //     modal.setAttribute('aria-hidden', 'true');
-    //
-    //     modalDialog.setAttribute('role', 'document');
-    //
-    //     modal.appendChild(modalDialog);
-    //     modalDialog.appendChild(modelContent);
-    //     modelContent.appendChild(modalHeader);
-    //     modelContent.appendChild(modalBody);
-    //     modalHeader.appendChild(modalTitle);
-    //     modalHeader.appendChild(modalButton);
-    //     modalButton.appendChild(modalButtonSpan);
-    //
-    //     return modal;
-    // }
 }
 
 // struct
