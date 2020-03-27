@@ -29,18 +29,8 @@ export class BaseRegionController extends Controller {
         const product = this._model.findUnmanagedProduct(productName);
 
         this._model.placeProductOnSquare(product, square);
-        this._view.clearCurrentProduct();
-        this._view.rerenderProductDropdown(this._model.getUnmanagedProducts());
-    };
 
-    onDropdownChange = (value) => {
-        if (value === 'Select a product') {
-            this._view.clearCurrentProduct();
-            return;
-        }
-
-        const currentProduct = this._model.findUnmanagedProduct(value);
-        this._view.renderCurrentProduct(currentProduct);
+        this.unmanagedProductController.rerenderDropdown();
     };
 
     onSquareClick = (ev) => {
@@ -65,12 +55,6 @@ export class BaseRegionController extends Controller {
 
     renderView() {
         this._view.renderSquares(this._model.getSquares());
-
-        const products = this._model.getUnmanagedProducts();
-
-        if (products.length > 0) {
-            this._view.rerenderProductDropdown(products);
-        }
     }
 
     /**

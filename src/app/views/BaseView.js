@@ -4,6 +4,10 @@ import {Destroyable} from '../util/destroyable';
 export class BaseView extends Destroyable {
     $root;
 
+    getView() {
+        return this.$root;
+    }
+
     constructor() {
         super();
         if (new.target === BaseView) {
