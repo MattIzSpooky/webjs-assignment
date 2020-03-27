@@ -1,6 +1,5 @@
 import {Controller} from '../Controller';
-import {fileToBase64} from '../../util/file';
-import {CustomAttribute} from '../../models/product';
+import {ProductDetailController} from '../ProductDetailController';
 
 export class BaseRegionController extends Controller {
     constructor() {
@@ -29,18 +28,8 @@ export class BaseRegionController extends Controller {
         const product = this._model.findUnmanagedProduct(productName);
 
         this._model.placeProductOnSquare(product, square);
-        this._view.clearCurrentProduct();
-        this._view.rerenderProductDropdown(this._model.getUnmanagedProducts());
-    };
 
-    onDropdownChange = (value) => {
-        if (value === 'Select a product') {
-            this._view.clearCurrentProduct();
-            return;
-        }
-
-        const currentProduct = this._model.findUnmanagedProduct(value);
-        this._view.renderCurrentProduct(currentProduct);
+        this.unmanagedProductController.rerenderDropdown();
     };
 
     onSquareClick = (ev) => {
@@ -55,7 +44,9 @@ export class BaseRegionController extends Controller {
         const product = square.getProduct();
 
         if (product) {
-            this._view.showProductEdit(square);
+            new ProductDetailController(this._model, product, () => {
+                this._view.updateSquare(square)
+            });
         }
     };
 
@@ -65,56 +56,5 @@ export class BaseRegionController extends Controller {
 
     renderView() {
         this._view.renderSquares(this._model.getSquares());
-
-        const products = this._model.getUnmanagedProducts();
-
-        if (products.length > 0) {
-            this._view.rerenderProductDropdown(products);
-        }
-    }
-
-    /**
-     * @param {FormData} formData
-     * @param {Clothes} product
-     * @param {Square} square
-     * @param {String} drawing
-     * @returns {Promise<void>}
-     */
-    onProductDetailsForm = async (formData, product, square, drawing) => {
-        try {
-            product.setComment(formData.get('comment'));
-
-            const imageFile = formData.get('productImage');
-
-            if (imageFile.size > 0) {
-                product.setImage(await fileToBase64(imageFile));
-            }
-
-            product.setSignImage(drawing);
-
-            product.clearCustomAttributes();
-            // Remove the ones we dont want as custom. we already have their data.
-            formData.delete('comment');
-            formData.delete('productImage');
-
-            for (const [key, value] of formData) {
-                product.addCustomAttribute(new CustomAttribute(key, value));
-            }
-
-            this._model._persist();
-            this._view.updateSquare(square);
-        } catch (e) {
-            this.showError(`Error`, e.message);
-        }
-    };
-
-    onProductDetailsImageClick = (square) => {
-        const product = square.getProduct();
-
-        if (product) {
-            product.setImage(null);
-            this._model._persist();
-            this._view.updateSquare(square);
-        }
     }
 }

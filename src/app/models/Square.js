@@ -1,5 +1,3 @@
-import {ProductFactory} from '../util/product-factory';
-
 export class Square {
     #x;
     #y;
@@ -45,20 +43,12 @@ export class Square {
         return JSON.stringify({
             x: this.getX(),
             y: this.getY(),
-            hasObstacle: this.hasObstacle(),
-            product: this.#product ? this.#product.toJSON() : undefined
+            hasObstacle: this.hasObstacle()
         });
     }
 
     static fromJSON(json) {
         const data = JSON.parse(json);
-
-        const square = new this(data.x, data.y, data.hasObstacle);
-
-        if (data.product) {
-            square.setProduct(new ProductFactory().fromJSON(data.product));
-        }
-
-        return square;
+        return new this(data.x, data.y, data.hasObstacle);
     }
 }

@@ -1,7 +1,9 @@
 /**
  * An abstract class
  */
-export class Product {
+import {Storable} from '../util/storable';
+
+export class Product extends Storable {
     #name;
     #description;
     #purchasePrice;
@@ -14,6 +16,7 @@ export class Product {
     #signImg;
 
     constructor(name, description, purchasePrice, minimalStock, currentStock) {
+        super();
         if (new.target === Product) {
             throw new TypeError('Cannot construct Product instances directly');
         }
@@ -114,6 +117,10 @@ export class Product {
         this.#currentStock = value;
     }
 
+    getType() {
+        return this.constructor.name;
+    }
+
     checkNegativeValue(value) {
         if (value < 0) {
             throw new RangeError('Cannot set a nagative value');
@@ -126,6 +133,46 @@ export class Product {
 
     static fromJSON() {
         throw new Error('Method fromJSON() must be implemented.');
+    }
+
+    _persist() {
+        const regionName = this.getType().toLowerCase();
+        const squareProducts = JSON.parse(localStorage.getItem(`${regionName}-square-products`));
+
+        const sqIndex = squareProducts.findIndex(sq => sq.type === this.getType() && sq.productName === this.getName());
+        squareProducts[sqIndex].product = this.toJSON();
+
+        localStorage.setItem(`${regionName}-square-products`, JSON.stringify(squareProducts));
+    }
+
+    saveUnmanaged() {
+        const regionName = this.getType().toLowerCase();
+        const unmanaged = JSON.parse(localStorage.getItem(`${regionName}-unmanaged`)).map(i => JSON.parse(i));
+
+        const sqIndex = unmanaged.findIndex(un => un.name === this.getName());
+
+        if (sqIndex === -1) {
+            unmanaged.push(this);
+        } else {
+            unmanaged[sqIndex] = this.toJSON();
+        }
+
+        localStorage.setItem(`${regionName}-unmanaged`, JSON.stringify(unmanaged.map(product => JSON.stringify(product))));
+    }
+
+    _prepareForSave() {
+        return {
+            type: this.constructor.name,
+            name: this.getName(),
+            description: this.getDescription(),
+            purchasePrice: this.getPurchasePrice(),
+            minimalStock: this.getMinimalStock(),
+            currentStock: this.getCurrentStock(),
+            image: this.getImage(),
+            customAttributes: this.getCustomAttributes(),
+            comment: this.getComment(),
+            signImage: this.getSignImage()
+        }
     }
 }
 

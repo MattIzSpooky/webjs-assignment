@@ -4,6 +4,10 @@ import {Destroyable} from '../util/destroyable';
 export class BaseView extends Destroyable {
     $root;
 
+    getView() {
+        return this.$root;
+    }
+
     constructor() {
         super();
         if (new.target === BaseView) {
@@ -121,9 +125,7 @@ export class BaseView extends Destroyable {
     }
 
     showErrorModal(title, message) {
-        const $modal = this.createElement('div', 'my-modal');
-
-        const $modalContent = this.createElement('div', 'my-modal-content');
+        const $modal = this.createModal();
 
         const $modalHeader = this.createElement('div', 'my-modal-header');
 
@@ -148,13 +150,21 @@ export class BaseView extends Destroyable {
 
         $modalBody.append($modalText);
 
-        $modalContent.append($modalHeader, $modalBody);
-
-        $modal.append($modalContent);
+        $modal.firstChild.append($modalHeader, $modalBody);
 
         const app = this.getElement('#app');
 
         app.prepend($modal);
+    }
+
+    createModal() {
+        const $modal = this.createElement('div', 'my-modal');
+
+        const $modalContent = this.createElement('div', 'my-modal-content');
+
+        $modal.append($modalContent);
+
+        return $modal;
     }
 
     // createErrorModal() {
