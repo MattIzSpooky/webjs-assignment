@@ -5,11 +5,11 @@ import {TierlantineWizardView} from "../../views/TierlantineWizardView";
 import {Clothes} from "../../models/Clothes";
 import {Decoration} from "../../models/Decoration";
 import {Tierlantine} from "../../models/Tierlantine";
+import {BaseWizardView} from "../../views/BaseWizardView";
 
 export class ProductWizardController extends Controller {
-    constructor(props) {
-        super(props);
-
+    constructor() {
+        super();
         this._switchScene();
     }
 
@@ -17,7 +17,7 @@ export class ProductWizardController extends Controller {
         ev.preventDefault();
         const form = new FormData(ev.target);
 
-        if (this._view.getCurrentIndex() === this._view.STEPS) {
+        if (this._view.getCurrentIndex() === BaseWizardView.STEPS) {
             this._saveProduct(form);
 
             this.showSucceed('Succesfull stored');

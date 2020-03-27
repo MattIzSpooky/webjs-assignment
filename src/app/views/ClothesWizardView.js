@@ -3,8 +3,8 @@ import {BaseWizardView} from "./BaseWizardView";
 export class ClothesWizardView extends BaseWizardView {
     #$form;
 
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.init();
 
