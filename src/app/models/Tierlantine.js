@@ -25,17 +25,8 @@ export class Tierlantine extends Product {
 
     toJSON() {
         return JSON.stringify({
-            type: this.constructor.name,
-            name: this.getName(),
-            description: this.getDescription(),
-            purchasePrice: this.getPurchasePrice(),
-            minimalStock: this.getMinimalStock(),
-            currentStock: this.getCurrentStock(),
+            ...this._prepareForSave(),
             weight: this.getWeight(),
-            image: this.getImage(),
-            customAttributes: this.getCustomAttributes(),
-            comment: this.getComment(),
-            signImage: this.getSignImage()
         });
     }
 
