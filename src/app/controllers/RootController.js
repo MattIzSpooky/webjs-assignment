@@ -4,6 +4,7 @@ import {TierlantineRegionController} from './regions/TierlantineRegionController
 import {DecorationRegionController} from './regions/DecorationRegionController';
 import {WeatherController} from './WeatherController';
 import {Controller} from './Controller';
+import {ProductWizardController} from "./regions/ProductWizardController";
 
 export class RootController extends Controller {
     #current;
@@ -18,6 +19,7 @@ export class RootController extends Controller {
         this._view.bindClickTierlantineButton(this.#onClickTiertineRegion);
         this._view.bindClickDecorationButton(this.#onClickDecorationButton);
         this._view.bindClickWeatherButton(this.#onClickWeatherButton);
+        this._view.bindClickProductsButton(this.#onClickProductsButton);
     }
 
     _recoverFromUrl() {
@@ -38,6 +40,9 @@ export class RootController extends Controller {
                 break;
             case 'weather':
                 controller = new WeatherController();
+                break;
+            case 'products':
+                controller = new ProductWizardController();
                 break;
             default:
                 controller = new ClothesRegionController();
@@ -61,6 +66,10 @@ export class RootController extends Controller {
 
     #onClickWeatherButton = () => {
         this._changeView(WeatherController, 'Weather');
+    };
+
+    #onClickProductsButton = () => {
+        this._changeView(ProductWizardController, 'Products');
     };
 
     _changeView(controller, title) {

@@ -26,4 +26,12 @@ export class Controller extends Destroyable {
             throw new Error('No view is set');
         }
     }
+
+    showSucceed(message) {
+        if (this._view) {
+            this._view.showSucceedModal(message);
+        } else {
+            throw new Error('No view is set');
+        }
+    }
 }

@@ -103,17 +103,16 @@ export class Region extends Storable {
         const rawSquares = localStorage.getItem(`${this.#name}-squares`);
         const rawUnmanagedProducts = localStorage.getItem(`${this.#name}-unmanaged`);
         const rawSquareProducts = localStorage.getItem(`${this.#name}-square-products`);
+        const productFactory = new ProductFactory();
+
+        if (rawUnmanagedProducts) {
+            this.#unmanagedProducts = JSON.parse(rawUnmanagedProducts).map(rawProduct => productFactory.fromSaveable(rawProduct));
+        }
 
         if (rawSquares) {
             this.#squares = JSON.parse(rawSquares).map(rawSquare => Square.fromSaveable(rawSquare));
         } else {
             this._generateSquares(obstructionCallBack);
-        }
-
-        const productFactory = new ProductFactory();
-
-        if (rawUnmanagedProducts) {
-            this.#unmanagedProducts = JSON.parse(rawUnmanagedProducts).map(rawProduct => productFactory.fromSaveable(rawProduct));
         }
 
         if (rawSquareProducts) {
