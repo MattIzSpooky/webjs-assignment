@@ -127,6 +127,21 @@ export class Product {
     static fromJSON() {
         throw new Error('Method fromJSON() must be implemented.');
     }
+
+    _prepareForSave() {
+        return {
+            type: this.constructor.name,
+            name: this.getName(),
+            description: this.getDescription(),
+            purchasePrice: this.getPurchasePrice(),
+            minimalStock: this.getMinimalStock(),
+            currentStock: this.getCurrentStock(),
+            image: this.getImage(),
+            customAttributes: this.getCustomAttributes(),
+            comment: this.getComment(),
+            signImage: this.getSignImage()
+        }
+    }
 }
 
 
