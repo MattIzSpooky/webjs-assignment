@@ -31,18 +31,18 @@ export class TierlantineWizardView extends BaseWizardView {
     }
 
     renderSpecificTab() {
-        const $inputWeight = this.createElement('input', 'mb-2');
+        const $inputWeight = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
         $inputWeight.name = 'weight';
         $inputWeight.placeholder = 'weight';
         $inputWeight.type = 'number';
         $inputWeight.min = 0;
 
-        const $tierlantineType = this.createElement('input');
+        const $tierlantineType = this.createElement('input', 'form-control', 'mb-2');
         $tierlantineType.name = 'type';
         $tierlantineType.value = 'tierlantine';
         $tierlantineType.type = 'hidden';
 
-        const $div = this.createElement('div', 'tab');
+        const $div = this.createElement('div', 'tab', 'form-group');
         $div.append($inputWeight, $tierlantineType);
 
         return $div;

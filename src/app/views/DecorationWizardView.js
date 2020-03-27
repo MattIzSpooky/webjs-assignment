@@ -31,17 +31,17 @@ export class DecorationWizardView extends BaseWizardView {
     }
 
     renderSpecificTab() {
-        const $inputColor = this.createElement('input', 'mb-2');
+        const $inputColor = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
         $inputColor.name = 'color';
         $inputColor.placeholder = 'color';
         $inputColor.type = 'color';
 
-        const $inputSize = this.createElement('input', 'mb-2');
+        const $inputSize = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
         $inputSize.name = 'size';
         $inputSize.placeholder = 'size';
         $inputSize.type = 'number';
 
-        const $inputPackageCount = this.createElement('input', 'mb-2');
+        const $inputPackageCount = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
         $inputPackageCount.name = 'packageCount';
         $inputPackageCount.placeholder = 'packageCount';
         $inputPackageCount.type = 'number';
@@ -51,7 +51,7 @@ export class DecorationWizardView extends BaseWizardView {
         $decorationType.value = 'decoration';
         $decorationType.type = 'hidden';
 
-        const $div = this.createElement('div', 'tab');
+        const $div = this.createElement('div', 'tab', 'form-group');
         $div.append($inputColor, $inputSize, $inputPackageCount, $decorationType);
 
         return $div;

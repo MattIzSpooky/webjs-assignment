@@ -51,65 +51,68 @@ export class BaseWizardView extends BaseView {
     }
 
     renderTabs() {
-        const $inputName = this.createElement('input', 'mb-2');
+        const $inputName = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
         $inputName.name = 'name';
         $inputName.placeholder = 'name';
-        const $inputDescription = this.createElement('input', 'mb-2');
+        const $inputDescription = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
         $inputDescription.name = 'description';
         $inputDescription.placeholder = 'description';
 
-        const $firstTab = this.createElement('div', 'tab');
+        const $firstTab = this.createElement('div', 'tab', 'form-group');
         $firstTab.append($inputName, $inputDescription);
 
-        const $inputPurchasePrice = this.createElement('input', 'mb-2');
+        const $inputPurchasePrice = this.createElement('input', 'form-control', 'mb-2');
         $inputPurchasePrice.name = 'purchasePrice';
         $inputPurchasePrice.placeholder = 'purchasePrice';
         $inputPurchasePrice.min = 0;
         $inputPurchasePrice.type = 'number';
-        const $inputMinimalStock = this.createElement('input', 'mb-2');
+
+        const $inputMinimalStock = this.createElement('input', 'form-control', 'mb-2');
         $inputMinimalStock.name = 'minimalStock';
         $inputMinimalStock.placeholder = 'minimalStock';
         $inputMinimalStock.min = 0;
         $inputMinimalStock.type = 'number';
-        const $inputCurrentStock = this.createElement('input', 'mb-2');
+
+        const $inputCurrentStock = this.createElement('input', 'form-control', 'mb-2');
         $inputCurrentStock.name = 'currentStock';
         $inputCurrentStock.placeholder = 'currentStock';
         $inputCurrentStock.min = 0;
         $inputCurrentStock.type = 'number';
 
-        const $secondTab = this.createElement('div', 'tab');
+        const $secondTab = this.createElement('div', 'tab', 'form-group');
         $secondTab.append($inputPurchasePrice, $inputMinimalStock, $inputCurrentStock);
 
         return [$firstTab, $secondTab];
     }
 
     renderNavButtons() {
-        this.#buttonClothes = this.createElement('button', 'btn', 'btn-primary');
+        this.#buttonClothes = this.createElement('button', 'btn', 'btn-primary', 'm-4');
         this.#buttonClothes.textContent = 'Clothes';
         this.#buttonClothes.type = 'button';
 
-        this.#buttonTierlantine = this.createElement('button', 'btn', 'btn-primary');
+        this.#buttonTierlantine = this.createElement('button', 'btn', 'btn-primary', 'm-4');
         this.#buttonTierlantine.textContent = 'Tierlantine';
         this.#buttonTierlantine.type = 'button';
 
-        this.#buttonDecoration = this.createElement('button', 'btn', 'btn-primary');
+        this.#buttonDecoration = this.createElement('button', 'btn', 'btn-primary', 'm-4');
         this.#buttonDecoration.textContent = 'Decoration';
         this.#buttonDecoration.type = 'button';
 
         const $div = this.createElement('div');
+        $div.style = 'text-align:center';
         $div.append(this.#buttonClothes, this.#buttonDecoration, this.#buttonTierlantine);
 
         return $div;
     }
 
     renderButtons() {
-        const $prev = this.createElement('button');
+        const $prev = this.createElement('button', 'btn', 'btn-default');
         $prev.id = 'prevBtn';
         $prev.textContent = 'Previous';
         $prev.type = 'button';
         $prev.onclick = () => this.nextPrev(-1);
 
-        const $next = this.createElement('button');
+        const $next = this.createElement('button', 'btn', 'btn-default');
         $next.id = 'nextBtn';
         $next.textContent = 'Next';
         $next.type = 'button';

@@ -31,12 +31,12 @@ export class ClothesWizardView extends BaseWizardView {
     }
 
     renderSpecificTab() {
-        const $inputClothesColor = this.createElement('input', 'mb-2');
+        const $inputClothesColor = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
         $inputClothesColor.name = 'color';
         $inputClothesColor.placeholder = 'color';
         $inputClothesColor.type = 'color';
 
-        const $inputClothesSize = this.createElement('input', 'mb-2');
+        const $inputClothesSize = this.createElement('input', 'mb-2', 'form-control', 'mb-2');
         $inputClothesSize.name = 'size';
         $inputClothesSize.placeholder = 'size';
         $inputClothesSize.type = 'number';
@@ -47,7 +47,7 @@ export class ClothesWizardView extends BaseWizardView {
         $clothesType.value = 'clothes';
         $clothesType.type = 'hidden';
 
-        const $div = this.createElement('div', 'tab');
+        const $div = this.createElement('div', 'tab', 'form-group');
         $div.append($inputClothesColor, $inputClothesSize, $clothesType);
 
         return $div;
