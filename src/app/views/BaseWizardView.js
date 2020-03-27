@@ -194,7 +194,7 @@ export class BaseWizardView extends BaseView {
             // A loop that checks every input field in the current tab:
             for (let i = 0; i < $input.length; i++) {
                 // If a field is empty...
-                if ($input[i].value === "") {
+                if ($input[i].value === "" || $input[i].value < 0) {
                     // add an "invalid" class to the field:
                     $input[i].className += " invalid";
                     // and set the current valid status to false
