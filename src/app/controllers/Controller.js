@@ -1,7 +1,14 @@
 import {Destroyable} from '../util/destroyable';
 
 export class Controller extends Destroyable {
+    /**
+     * @type {*}
+     */
     _view;
+
+    /**
+     * @type {*}
+     */
     _model;
 
     constructor() {
@@ -11,14 +18,19 @@ export class Controller extends Destroyable {
         }
     }
 
+    /**
+     * Destroys everything associated with the controller.
+     * It is advised to override this if you need to delete private variables.
+     */
     destroy() {
         this._model = null;
-
-        if (this._view) {
-            this._view.destroy();
-        }
+        this._view?.destroy();
     }
 
+    /**
+     * @param {String} title
+     * @param {String} message
+     */
     showError(title, message) {
         if (this._view) {
             this._view.showErrorModal(title, message);
@@ -27,6 +39,9 @@ export class Controller extends Destroyable {
         }
     }
 
+    /**
+     * @param {String} message
+     */
     showSucceed(message) {
         if (this._view) {
             this._view.showSucceedModal(message);

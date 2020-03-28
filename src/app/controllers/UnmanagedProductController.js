@@ -2,11 +2,17 @@ import {Controller} from './Controller';
 import {UnmanagedProductsView} from '../views/UnmanagedProductsView';
 
 export class UnmanagedProductController extends Controller {
+    /**
+     * @returns {UnmanagedProductsView}
+     */
     getView() {
         return this._view.getView();
     }
 
-    constructor(region, newProductHandler) {
+    /**
+     * @param {Region} region
+     */
+    constructor(region) {
         super();
         this._view = new UnmanagedProductsView();
         this._model = region;
@@ -18,9 +24,11 @@ export class UnmanagedProductController extends Controller {
         }
 
         this._view.bindDropdownChange(this.#onDropdownChange);
-        this._view.bindNewProductClick(newProductHandler);
     }
 
+    /**
+     * @param {String} value
+     */
     #onDropdownChange = (value) => {
         if (value === 'Select a product') {
             this._view.clearCurrentProduct();
@@ -30,7 +38,6 @@ export class UnmanagedProductController extends Controller {
         const currentProduct = this._model.findUnmanagedProduct(value);
         this._view.renderCurrentProduct(currentProduct);
     };
-
 
     rerenderDropdown() {
         this._view.clearCurrentProduct();

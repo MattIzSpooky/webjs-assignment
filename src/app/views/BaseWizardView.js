@@ -3,6 +3,7 @@ import {ColumnBuilder} from '../util/column';
 
 export class BaseWizardView extends BaseView {
     static STEPS = 3;
+
     currentIndex;
     #buttonClothes;
     #buttonDecoration;
@@ -190,7 +191,7 @@ export class BaseWizardView extends BaseView {
 
             // If the valid status is true, mark the step as finished and valid:
             if (valid) {
-                document.getElementsByClassName('step')[this.currentIndex].className += ' finish';
+                document.getElementsByClassName('step')[this.currentIndex].classList.add('finish');
             }
         }
 

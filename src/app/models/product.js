@@ -128,7 +128,7 @@ export class Product extends Storable {
     }
 
 
-    _persist() {
+    save() {
         const regionName = this.getType().toLowerCase();
         const squareProducts = JSON.parse(localStorage.getItem(`${regionName}-square-products`));
 
@@ -138,16 +138,23 @@ export class Product extends Storable {
         localStorage.setItem(`${regionName}-square-products`, JSON.stringify(squareProducts));
     }
 
-    saveUnmanaged() {
+    saveToUnmanaged() {
         const regionName = this.getType().toLowerCase();
         const unmanaged = JSON.parse(localStorage.getItem(`${regionName}-unmanaged`)) || [];
+        const squareProducts = JSON.parse(localStorage.getItem(`${regionName}-square-products`));
 
-        const sqIndex = unmanaged.findIndex(un => un.name === this.getName());
+        const sp = squareProducts.some(sp => sp.product.name === this.getName());
 
-        if (sqIndex === -1) {
+        if (sp) {
+            throw new Error('No duplicate entries allowed. Product with same name exists in the region.');
+        }
+
+        const unIndex = unmanaged.findIndex(un => un.name === this.getName());
+
+        if (unIndex === -1) {
             unmanaged.push(this.toSaveable());
         } else {
-            unmanaged[sqIndex] = this.toSaveable();
+            throw new Error('No duplicate entries allowed. There is already an unmanaged product with the same name');
         }
 
         localStorage.setItem(`${regionName}-unmanaged`, JSON.stringify(unmanaged));
@@ -155,7 +162,7 @@ export class Product extends Storable {
 
     _prepareForSave() {
         return {
-            type: this.constructor.name,
+            type: this.getType(),
             name: this.getName(),
             description: this.getDescription(),
             purchasePrice: this.getPurchasePrice(),

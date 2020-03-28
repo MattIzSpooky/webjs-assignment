@@ -34,31 +34,7 @@ export class Region extends Storable {
             }
         }
 
-        this._persist();
-    }
-
-    /**
-     * @param {Product} newProduct
-     */
-    addUnmanagedProduct(newProduct) {
-        if (this.#unmanagedProducts.some(product => product.getName() === newProduct.getName())) {
-            throw new Error('No duplicate entries allowed. There is already an unmanaged product with the same name');
-        }
-
-        if (this.#squares.some(square => {
-            const product = square.getProduct();
-            if (product) {
-                return product.getName() === newProduct.getName()
-            }
-
-            return false;
-        })) {
-            throw new Error('No duplicate entries allowed. Already exists in the region.');
-        }
-
-        this.#unmanagedProducts.push(newProduct);
-
-        this._persist();
+        this.save();
     }
 
     swapSquares(square1, square2) {
@@ -66,7 +42,7 @@ export class Region extends Storable {
         square1.setProduct(square2.getProduct());
         square2.setProduct(square1Product);
 
-        this._persist();
+        this.save();
     }
 
     placeProductOnSquare(product, square) {
@@ -77,10 +53,10 @@ export class Region extends Storable {
 
         square.setProduct(product);
 
-        this._persist();
+        this.save();
     }
 
-    _persist() {
+    save() {
         localStorage.setItem(`${this.#name}-squares`, JSON.stringify(this.#squares.map(square => square.toSaveable())));
 
         const products = this.#squares

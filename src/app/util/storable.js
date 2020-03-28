@@ -1,6 +1,3 @@
-/**
- * An abstract class
- */
 export class Storable {
     constructor() {
         if (new.target === Storable) {
@@ -8,7 +5,7 @@ export class Storable {
         }
     }
 
-    _persist() {
+    save() {
         throw new Error("Method '_persist()' must be implemented.");
     }
 
