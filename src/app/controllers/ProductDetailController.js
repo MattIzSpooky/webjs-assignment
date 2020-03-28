@@ -24,7 +24,7 @@ export class ProductDetailController extends Controller {
     /**
      * @param {FormData} formData
      * @param {String} drawing
-     * @returns {Promise<void>}
+     * @returns {Promise<Boolean>}
      */
     #onProductDetailsForm = async (formData, drawing) => {
         try {
@@ -49,8 +49,12 @@ export class ProductDetailController extends Controller {
 
             this.#product.save();
             this.updateSquareInViewCallback();
+
+            return true;
         } catch (e) {
             this.showError(`Error`, e.message);
+
+            return false;
         }
     };
 

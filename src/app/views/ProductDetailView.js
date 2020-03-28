@@ -139,10 +139,13 @@ export class ProductDetailView extends BaseView {
 
         $form.onsubmit = async (ev) => {
             ev.preventDefault();
-            await new Audio(cashSound).play();
-            await this.#onProductDetailsForm(new FormData(ev.target), $canvasWrapper.firstChild.firstChild.toDataURL('image/png'));
 
-            this.#onClose();
+            const success = await this.#onProductDetailsForm(new FormData(ev.target), $canvasWrapper.firstChild.firstChild.toDataURL('image/png'));
+
+            if (success) {
+                await new Audio(cashSound).play();
+                this.#onClose();
+            }
         };
 
         const app = this.getElement('#app');

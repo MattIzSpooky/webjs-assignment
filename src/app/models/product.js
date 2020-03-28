@@ -162,7 +162,7 @@ export class Product extends Storable {
 
     _prepareForSave() {
         return {
-            type: this.constructor.name,
+            type: this.getType(),
             name: this.getName(),
             description: this.getDescription(),
             purchasePrice: this.getPurchasePrice(),
