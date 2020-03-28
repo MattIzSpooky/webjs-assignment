@@ -10,12 +10,13 @@ export class Product extends Storable {
     #minimalStock;
     #currentStock;
     #image;
+    #profitMargin;
 
     #customAttributes = [];
     #comment;
     #signImg;
 
-    constructor(name, description, purchasePrice, minimalStock, currentStock) {
+    constructor(name, description, purchasePrice, minimalStock, currentStock, profitMargin) {
         super();
         if (new.target === Product) {
             throw new TypeError('Cannot construct Product instances directly');
@@ -26,6 +27,29 @@ export class Product extends Storable {
         this.setPurchasePrice(purchasePrice);
         this.setMinimalStock(minimalStock);
         this.setCurrentStock(currentStock);
+        this.setProfitMargin(profitMargin);
+    }
+
+    setProfitMargin(margin) {
+        this.#profitMargin = margin;
+    }
+
+    getProfitMargin() {
+        return this.#profitMargin;
+    }
+
+    getSalesPrice() {
+        const price = this.#purchasePrice + this.#profitMargin;
+
+        if (price < 0) {
+            return 0;
+        }
+
+        return price;
+    }
+
+    getSalesPriceWithTax() {
+        return this.getSalesPrice() * 1.21;
     }
 
     /**
@@ -143,7 +167,7 @@ export class Product extends Storable {
         const unmanaged = JSON.parse(localStorage.getItem(`${regionName}-unmanaged`)) || [];
         const squareProducts = JSON.parse(localStorage.getItem(`${regionName}-square-products`));
 
-        const sp = squareProducts.some(sp => sp.product.name === this.getName());
+        const sp = squareProducts?.some(sp => sp.product.name === this.getName());
 
         if (sp) {
             throw new Error('No duplicate entries allowed. Product with same name exists in the region.');
@@ -165,13 +189,14 @@ export class Product extends Storable {
             type: this.getType(),
             name: this.getName(),
             description: this.getDescription(),
-            purchasePrice: this.getPurchasePrice(),
-            minimalStock: this.getMinimalStock(),
-            currentStock: this.getCurrentStock(),
+            purchasePrice: +this.getPurchasePrice(),
+            minimalStock: +this.getMinimalStock(),
+            currentStock: +this.getCurrentStock(),
             image: this.getImage(),
             customAttributes: this.getCustomAttributes(),
             comment: this.getComment(),
-            signImage: this.getSignImage()
+            signImage: this.getSignImage(),
+            profitMargin: +this.getProfitMargin()
         }
     }
 

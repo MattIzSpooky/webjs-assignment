@@ -46,17 +46,17 @@ export class ProductWizardController extends Controller {
             case 'clothes':
                 product = new Clothes(form.get('name'),
                     form.get('description'), form.get('purchasePrice'), form.get('minimalStock'),
-                    form.get('currentStock'), form.get('color'), form.get('size'));
+                    form.get('currentStock'), form.get('profitMargin'), form.get('color'), form.get('size'));
                 break;
             case 'decoration':
                 product = new Decoration(form.get('name'),
                     form.get('description'), form.get('purchasePrice'), form.get('minimalStock'),
-                    form.get('currentStock'), form.get('color'), form.get('size'), form.get('packageCount'));
+                    form.get('currentStock'), form.get('profitMargin'), form.get('color'), form.get('size'), form.get('packageCount'));
                 break;
             case 'tierlantine':
                 product = new Tierlantine(form.get('name'),
                     form.get('description'), form.get('purchasePrice'), form.get('minimalStock'),
-                    form.get('currentStock'), form.get('weight'));
+                    form.get('currentStock'), form.get('profitMargin'), form.get('weight'));
                 break;
             default:
                 throw new Error(`Unknown product type: ${type}`)
