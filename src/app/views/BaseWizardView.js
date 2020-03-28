@@ -28,15 +28,15 @@ export class BaseWizardView extends BaseView {
 
         const colBuilder = new ColumnBuilder().addType('md');
 
-        const $butonColumn = this.createColumn(colBuilder.addWidth(12).getResult());
+        const $buttonColumn = this.createColumn(colBuilder.addWidth(12).getResult());
         const $column = this.createColumn(colBuilder.getResult());
 
         $column.append(this.render());
-        $butonColumn.append(this.renderNavButtons());
+        $buttonColumn.append(this.renderNavButtons());
 
         const $row = this.createRow();
 
-        $row.append($butonColumn, $column);
+        $row.append($buttonColumn, $column);
 
         this.$root.append($row);
         app.append(this.$root);
@@ -67,8 +67,10 @@ export class BaseWizardView extends BaseView {
         const $inputCurrentStock = this.createInput(new Input('currentStock', 'number'));
         $inputCurrentStock.lastChild.min = 0;
 
+        const $inputProfitMargin = this.createInput(new Input('profitMargin', 'number'));
+
         const $secondTab = this.createElement('div', 'tab', 'form-group');
-        $secondTab.append($inputPurchasePrice, $inputMinimalStock, $inputCurrentStock);
+        $secondTab.append($inputPurchasePrice, $inputMinimalStock, $inputCurrentStock, $inputProfitMargin);
 
         return [$firstTab, $secondTab];
     }
@@ -181,7 +183,7 @@ export class BaseWizardView extends BaseView {
             // A loop that checks every input field in the current tab:
             for (let i = 0; i < $input.length; i++) {
                 // If a field is empty...
-                if ($input[i].value === '' || $input[i].value < 0) {
+                if ($input[i].value === '') {
                     // add an "invalid" class to the field:
                     $input[i].classList.add('invalid');
                     // and set the current valid status to false

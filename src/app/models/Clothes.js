@@ -4,8 +4,8 @@ export class Clothes extends Product {
     #color;
     #size;
 
-    constructor(name, description, purchasePrice, minimalStock, currentStock, color, size) {
-        super(name, description, purchasePrice, minimalStock, currentStock);
+    constructor(name, description, purchasePrice, minimalStock, currentStock, profitMargin, color, size) {
+        super(name, description, purchasePrice, minimalStock, currentStock, profitMargin);
         this.setColor(color);
         this.setSize(size);
     }
@@ -48,13 +48,13 @@ export class Clothes extends Product {
         return {
             ...this._prepareForSave(),
             color: this.getColor(),
-            size: this.getSize(),
+            size: +this.getSize(),
         }
     }
 
     static fromSaveable(data) {
         const product = new this(data.name, data.description, data.purchasePrice,
-            data.minimalStock, data.currentStock, data.color, data.size);
+            data.minimalStock, data.currentStock, data.profitMargin, data.color, data.size);
 
         product.setImage(data.image);
         product.setComment(data.comment);

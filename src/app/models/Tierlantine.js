@@ -3,8 +3,8 @@ import {Product} from './product';
 export class Tierlantine extends Product {
     #weight;
 
-    constructor(name, description, purchasePrice, minimalStock, currentStock, weight) {
-        super(name, description, purchasePrice, minimalStock, currentStock);
+    constructor(name, description, purchasePrice, minimalStock, currentStock, profitMargin, weight) {
+        super(name, description, purchasePrice, minimalStock, currentStock, profitMargin);
         this.setWeight(weight);
     }
 
@@ -26,13 +26,13 @@ export class Tierlantine extends Product {
     toSaveable() {
         return {
             ...this._prepareForSave(),
-            weight: this.getWeight(),
+            weight: +this.getWeight(),
         }
     }
 
     static fromSaveable(data) {
         const product = new this(data.name, data.description, data.purchasePrice,
-            data.minimalStock, data.currentStock, data.weight);
+            data.minimalStock, data.currentStock, data.profitMargin, data.weight);
 
         product.setImage(data.image);
         product.setComment(data.comment);
