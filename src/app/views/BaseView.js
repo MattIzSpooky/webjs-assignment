@@ -48,6 +48,10 @@ export class BaseView extends Destroyable {
         return div;
     }
 
+    /**
+     * @param {...Input} fields
+     * @returns {HTMLFormElement}
+     */
     createForm(...fields) {
         const $form = this.createElement('form');
 
@@ -65,7 +69,6 @@ export class BaseView extends Destroyable {
     }
 
     /**
-     *
      * @param {Input} input
      */
     createInput({type, name, defaultValue}) {
@@ -95,6 +98,11 @@ export class BaseView extends Destroyable {
         return $inputGroup;
     }
 
+    /**
+     * @param {string} title
+     * @param {...String} texts
+     * @returns {HTMLDivElement}
+     */
     createCard(title, ...texts) {
         const $card = this.createElement('div', 'card');
         const $content = this.createElement('div', 'card-body');
@@ -124,6 +132,9 @@ export class BaseView extends Destroyable {
         this.$root.remove();
     }
 
+    /**
+     * @param {String} message
+     */
     showSucceedModal(message) {
         const $modal = this.createModal();
         const $messageBox = this.createElement('div', 'my-modal-header-succeed');
@@ -144,6 +155,10 @@ export class BaseView extends Destroyable {
         app.prepend($modal);
     }
 
+    /**
+     * @param {String} title
+     * @param {String} message
+     */
     showErrorModal(title, message) {
         const $modal = this.createModal();
 
@@ -177,6 +192,9 @@ export class BaseView extends Destroyable {
         app.prepend($modal);
     }
 
+    /**
+     * @returns {HTMLDivElement}
+     */
     createModal() {
         const $modal = this.createElement('div', 'my-modal');
 

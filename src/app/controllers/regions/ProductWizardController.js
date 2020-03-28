@@ -10,7 +10,7 @@ import {BaseWizardView} from '../../views/BaseWizardView';
 export class ProductWizardController extends Controller {
     constructor() {
         super();
-        this._switchScene();
+        this._switchScene('clothes');
     }
 
     #onAddProduct = (ev) => {
@@ -32,6 +32,11 @@ export class ProductWizardController extends Controller {
         }
     };
 
+    /**
+     * @param {FormData} form
+     * @throws
+     * @private
+     */
     _saveProduct(form) {
         let product = null;
 
@@ -66,6 +71,10 @@ export class ProductWizardController extends Controller {
         this._view.showTab(this._view.getCurrentIndex());
     }
 
+    /**
+     * @param {String} name
+     * @private
+     */
     _switchScene(name) {
         this.destroy();
 

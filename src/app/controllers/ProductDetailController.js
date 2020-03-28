@@ -4,17 +4,33 @@ import {CustomAttribute} from '../models/product';
 import {fileToBase64} from '../util/file';
 
 export class ProductDetailController extends Controller {
+    /**
+     * @type {Product}
+     */
     #product;
+
+    /**
+     * @type {Function}
+     */
     #updateSquareInViewCallback;
 
+    /**
+     *
+     * @param {Region} region
+     * @param {Product} product
+     * @param {CallableFunction} onProductUpdated
+     */
     constructor(region, product, onProductUpdated) {
         super();
         this._model = region;
         this.#product = product;
-        this.updateSquareInViewCallback = onProductUpdated;
+        this.#updateSquareInViewCallback = onProductUpdated;
         this._view = new ProductDetailView(product, this.#onProductDetailsForm, this.#onClose, this.#onProductDetailsImageClick);
     }
 
+    /**
+     * Called when the detail view is closed.
+     */
     #onClose = () => {
         this.#product = null;
 
@@ -48,7 +64,7 @@ export class ProductDetailController extends Controller {
             }
 
             this.#product.save();
-            this.updateSquareInViewCallback();
+            this.#updateSquareInViewCallback();
 
             return true;
         } catch (e) {
@@ -58,7 +74,11 @@ export class ProductDetailController extends Controller {
         }
     };
 
+    /**
+     * Called when the image in the detail view is clicked. Sets the image to null.
+     */
     #onProductDetailsImageClick = () => {
         this.#product.setImage(null);
+        this.#updateSquareInViewCallback();
     };
 }

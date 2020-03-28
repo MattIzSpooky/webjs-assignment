@@ -4,7 +4,7 @@ $width: $height;
 .product-details {
   @extend .my-modal;
   z-index: 1;
-  
+
   .my-modal {
     z-index: 1;
   }

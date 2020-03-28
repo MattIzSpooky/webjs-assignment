@@ -1,6 +1,3 @@
-/**
- * An abstract class
- */
 export class Storable {
     constructor() {
         if (new.target === Storable) {

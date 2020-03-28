@@ -6,6 +6,9 @@ import {RegionController} from './regions/RegionController';
 import {Region} from '../models/Region';
 
 export class RootController extends Controller {
+    /**
+     * @type {Controller}
+     */
     #current;
 
     constructor() {
@@ -69,11 +72,12 @@ export class RootController extends Controller {
         this._changeView(new ProductWizardController(), 'Products');
     };
 
+    /**
+     * @param {Controller} controller
+     * @param {String} title
+     * @private
+     */
     _changeView(controller, title) {
-        if (location.pathname.includes(title.toLowerCase())) {
-            return;
-        }
-
         this.#current.destroy();
         this.#current = controller;
         history.pushState(null, title, `/${title.toLowerCase()}`);
