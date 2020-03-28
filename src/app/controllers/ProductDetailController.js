@@ -43,6 +43,7 @@ export class ProductDetailController extends Controller {
      * @returns {Promise<Boolean>}
      */
     #onProductDetailsForm = async (formData, drawing) => {
+        const imageBeforeUpload = this.#product.getImage();
         try {
             this.#product.setComment(formData.get('comment'));
 
@@ -69,7 +70,8 @@ export class ProductDetailController extends Controller {
             return true;
         } catch (e) {
             this.showError(`Error`, e.message);
-
+            this.#product.setImage(imageBeforeUpload);
+            
             return false;
         }
     };
