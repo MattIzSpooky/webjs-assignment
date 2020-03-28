@@ -8,7 +8,7 @@ export class Storable {
         }
     }
 
-    _persist() {
+    save() {
         throw new Error("Method '_persist()' must be implemented.");
     }
 

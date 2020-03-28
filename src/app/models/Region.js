@@ -34,7 +34,7 @@ export class Region extends Storable {
             }
         }
 
-        this._persist();
+        this.save();
     }
 
     /**
@@ -58,7 +58,7 @@ export class Region extends Storable {
 
         this.#unmanagedProducts.push(newProduct);
 
-        this._persist();
+        this.save();
     }
 
     swapSquares(square1, square2) {
@@ -66,7 +66,7 @@ export class Region extends Storable {
         square1.setProduct(square2.getProduct());
         square2.setProduct(square1Product);
 
-        this._persist();
+        this.save();
     }
 
     placeProductOnSquare(product, square) {
@@ -77,10 +77,10 @@ export class Region extends Storable {
 
         square.setProduct(product);
 
-        this._persist();
+        this.save();
     }
 
-    _persist() {
+    save() {
         localStorage.setItem(`${this.#name}-squares`, JSON.stringify(this.#squares.map(square => square.toSaveable())));
 
         const products = this.#squares

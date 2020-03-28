@@ -1,11 +1,11 @@
-import {Controller} from "../Controller";
-import {DecorationWizardView} from "../../views/DecorationWizardView";
-import {ClothesWizardView} from "../../views/ClothesWizardView";
-import {TierlantineWizardView} from "../../views/TierlantineWizardView";
-import {Clothes} from "../../models/Clothes";
-import {Decoration} from "../../models/Decoration";
-import {Tierlantine} from "../../models/Tierlantine";
-import {BaseWizardView} from "../../views/BaseWizardView";
+import {Controller} from '../Controller';
+import {DecorationWizardView} from '../../views/DecorationWizardView';
+import {ClothesWizardView} from '../../views/ClothesWizardView';
+import {TierlantineWizardView} from '../../views/TierlantineWizardView';
+import {Clothes} from '../../models/Clothes';
+import {Decoration} from '../../models/Decoration';
+import {Tierlantine} from '../../models/Tierlantine';
+import {BaseWizardView} from '../../views/BaseWizardView';
 
 export class ProductWizardController extends Controller {
     constructor() {
@@ -15,13 +15,19 @@ export class ProductWizardController extends Controller {
 
     #onAddProduct = (ev) => {
         ev.preventDefault();
+
+
+        if (this._view.getCurrentIndex() !== BaseWizardView.STEPS) {
+            return;
+        }
         const form = new FormData(ev.target);
 
-        if (this._view.getCurrentIndex() === BaseWizardView.STEPS) {
+        try {
             this._saveProduct(form);
-
             this.showSucceed('Succesfull stored');
-
+        } catch (e) {
+            this.showError('error', e.message);
+        } finally {
             this._reset(ev);
         }
     };
@@ -29,26 +35,29 @@ export class ProductWizardController extends Controller {
     _saveProduct(form) {
         let product = null;
 
-        switch (form.get('type')) {
+        const type = form.get('type');
+
+        switch (type) {
             case 'clothes':
                 product = new Clothes(form.get('name'),
                     form.get('description'), form.get('purchasePrice'), form.get('minimalStock'),
                     form.get('currentStock'), form.get('color'), form.get('size'));
-                product.saveUnmanaged();
                 break;
             case 'decoration':
                 product = new Decoration(form.get('name'),
                     form.get('description'), form.get('purchasePrice'), form.get('minimalStock'),
                     form.get('currentStock'), form.get('color'), form.get('size'), form.get('packageCount'));
-                product.saveUnmanaged();
                 break;
             case 'tierlantine':
                 product = new Tierlantine(form.get('name'),
                     form.get('description'), form.get('purchasePrice'), form.get('minimalStock'),
                     form.get('currentStock'), form.get('weight'));
-                product.saveUnmanaged();
                 break;
+            default:
+                throw new Error(`Unknown product type: ${type}`)
         }
+
+        product.saveToUnmanaged();
     }
 
     _reset(ev) {
@@ -60,28 +69,26 @@ export class ProductWizardController extends Controller {
     _switchScene(name) {
         this.destroy();
 
+        let view;
+
         switch (name) {
             case 'clothes':
-                this._view = new ClothesWizardView();
-                this._bindEvents();
-                this._view.bindOnFormSubmit(this.#onAddProduct);
+                view = new ClothesWizardView();
                 break;
             case 'tierlantine':
-                this._view = new TierlantineWizardView();
-                this._bindEvents();
-                this._view.bindOnFormSubmit(this.#onAddProduct);
+                view = new TierlantineWizardView();
                 break;
             case 'decoration':
-                this._view = new DecorationWizardView();
-                this._bindEvents();
-                this._view.bindOnFormSubmit(this.#onAddProduct);
+                view = new DecorationWizardView();
                 break;
             default:
-                this._view = new ClothesWizardView();
-                this._bindEvents();
-                this._view.bindOnFormSubmit(this.#onAddProduct);
+                view = new ClothesWizardView();
                 break;
         }
+
+        this._view = view;
+        this._bindEvents();
+        this._view.bindOnFormSubmit(this.#onAddProduct);
     }
 
     _bindEvents() {

@@ -1,10 +1,9 @@
 import {RootView} from '../views/RootView';
-import {ClothesRegionController} from './regions/ClothesRegionController';
-import {TierlantineRegionController} from './regions/TierlantineRegionController';
-import {DecorationRegionController} from './regions/DecorationRegionController';
 import {WeatherController} from './WeatherController';
 import {Controller} from './Controller';
-import {ProductWizardController} from "./regions/ProductWizardController";
+import {ProductWizardController} from './regions/ProductWizardController';
+import {RegionController} from './regions/RegionController';
+import {Region} from '../models/Region';
 
 export class RootController extends Controller {
     #current;
@@ -29,14 +28,11 @@ export class RootController extends Controller {
         let controller;
 
         switch (part) {
-            case 'clothes':
-                controller = new ClothesRegionController();
-                break;
             case 'tierlantine':
-                controller = new TierlantineRegionController();
+                controller = new RegionController(new Region('tierlantine', (x, y) => y % 6 === 0 && x % 6 === 0));
                 break;
             case 'decoration':
-                controller = new DecorationRegionController();
+                controller = new RegionController(new Region('decoration', (x, y) => y % 3 === 0 || x % 4 === 0));
                 break;
             case 'weather':
                 controller = new WeatherController();
@@ -44,8 +40,9 @@ export class RootController extends Controller {
             case 'products':
                 controller = new ProductWizardController();
                 break;
+            case 'clothes':
             default:
-                controller = new ClothesRegionController();
+                controller = new RegionController(new Region('clothes', (x, y) => y % 4 === 0 && x % 4 === 0));
                 break;
         }
 
@@ -53,23 +50,23 @@ export class RootController extends Controller {
     }
 
     #onClickClothesRegion = () => {
-        this._changeView(ClothesRegionController, 'Clothes');
+        this._changeView(new RegionController(new Region('clothes', (x, y) => y % 4 === 0 && x % 4 === 0)), 'Clothes');
     };
 
     #onClickTiertineRegion = () => {
-        this._changeView(TierlantineRegionController, 'Tierlantine');
+        this._changeView(new RegionController(new Region('tierlantine', (x, y) => y % 6 === 0 && x % 6 === 0)), 'Tierlantine');
     };
 
     #onClickDecorationButton = () => {
-        this._changeView(DecorationRegionController, 'Decoration');
+        this._changeView(new RegionController(new Region('decoration', (x, y) => y % 3 === 0 || x % 4 === 0)), 'Decoration');
     };
 
     #onClickWeatherButton = () => {
-        this._changeView(WeatherController, 'Weather');
+        this._changeView(new WeatherController(), 'Weather');
     };
 
     #onClickProductsButton = () => {
-        this._changeView(ProductWizardController, 'Products');
+        this._changeView(new ProductWizardController(), 'Products');
     };
 
     _changeView(controller, title) {
@@ -78,7 +75,7 @@ export class RootController extends Controller {
         }
 
         this.#current.destroy();
-        this.#current = new controller();
+        this.#current = controller;
         history.pushState(null, title, `/${title.toLowerCase()}`);
     }
 }

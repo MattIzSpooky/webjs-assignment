@@ -47,7 +47,7 @@ export class ProductDetailController extends Controller {
                 this.#product.addCustomAttribute(new CustomAttribute(key, value));
             }
 
-            this.#product._persist();
+            this.#product.save();
             this.updateSquareInViewCallback();
         } catch (e) {
             this.showError(`Error`, e.message);
