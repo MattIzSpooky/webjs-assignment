@@ -16,7 +16,7 @@ export class RegionController extends Controller {
     constructor(region) {
         super();
         this._model = region;
-        this._view = new RegionView(Region.AMOUNT_OF_ROWS, this.onSquareDrag, this.onSquareDrop, this.onSquareClick, this.onProductDrop);
+        this._view = new RegionView(Region.AMOUNT_OF_ROWS, this.#onSquareDrag, this.#onSquareDrop, this.#onSquareClick, this.#onProductDrop);
 
         this._renderView();
 
@@ -28,7 +28,7 @@ export class RegionController extends Controller {
     /**
      * @param {DragEvent} ev
      */
-    onSquareDrag = (ev) => {
+    #onSquareDrag = (ev) => {
         ev.dataTransfer.setData('text', ev.target.id);
     };
 
@@ -38,7 +38,7 @@ export class RegionController extends Controller {
      * @param {Number} xTarget
      * @param {Number} yTarget
      */
-    onSquareDrop = ({xDrag, yDrag}, {xTarget, yTarget}) => {
+    #onSquareDrop = ({xDrag, yDrag}, {xTarget, yTarget}) => {
         const squares = this._model.getSquares();
 
         const squareDrag = this._findSquareByCoords(squares, xDrag, yDrag);
@@ -52,7 +52,7 @@ export class RegionController extends Controller {
      * @param {Number} xTarget
      * @param {Number} yTarget
      */
-    onProductDrop = (productName, {xTarget, yTarget}) => {
+    #onProductDrop = (productName, {xTarget, yTarget}) => {
         const squares = this._model.getSquares();
         const square = this._findSquareByCoords(squares, xTarget, yTarget);
         const product = this._model.findUnmanagedProduct(productName);
@@ -65,7 +65,7 @@ export class RegionController extends Controller {
     /**
      * @param {Event} ev
      */
-    onSquareClick = (ev) => {
+    #onSquareClick = (ev) => {
         ev.preventDefault();
 
         const squares = this._model.getSquares();
