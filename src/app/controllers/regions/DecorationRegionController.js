@@ -1,7 +1,6 @@
 import {Region} from '../../models/Region';
 import {BaseRegionController} from './BaseRegionController';
 import {RegionView} from '../../views/RegionView';
-import {Decoration} from '../../models/Decoration';
 import {UnmanagedProductController} from '../UnmanagedProductController';
 
 export class DecorationRegionController extends BaseRegionController {
@@ -11,21 +10,8 @@ export class DecorationRegionController extends BaseRegionController {
         this._view = new RegionView(Region.AMOUNT_OF_ROWS, this.onSquareDrag, this.onSquareDrop, this.onSquareClick, this.onProductDrop);
 
         this.renderView();
-        this.unmanagedProductController = new UnmanagedProductController(this._model, this.onNewProductClick);
+        this.unmanagedProductController = new UnmanagedProductController(this._model);
 
         this._view.attachView(this.unmanagedProductController.getView());
     }
-
-    onNewProductClick = (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        try {
-            const clothes = new Decoration('test', 'description', 3, 4, 5, '#000000', 3, 20);
-            this._model.addUnmanagedProduct(clothes);
-            this.unmanagedProductController.rerenderDropdown();
-        } catch (e) {
-            this.showError('Error', e.message);
-        }
-    };
 }

@@ -3,7 +3,6 @@ import {BaseView} from './BaseView';
 export class UnmanagedProductsView extends BaseView {
     #$unmanagedProductsDropdown;
     #$currentProduct;
-    #$newProductButton;
 
     constructor() {
         super();
@@ -22,10 +21,7 @@ export class UnmanagedProductsView extends BaseView {
 
         this.#$currentProduct = this.createElement('div');
 
-        this.#$newProductButton = this.createElement('button', 'btn', 'btn-primary');
-        this.#$newProductButton.textContent = 'New product';
-
-        this.$root.append(this.#$newProductButton, $formGroup, this.#$currentProduct);
+        this.$root.append($formGroup, this.#$currentProduct);
     }
 
     rerenderProductDropdown(products) {
@@ -55,10 +51,6 @@ export class UnmanagedProductsView extends BaseView {
             ev.preventDefault();
             handler(ev.target.value);
         };
-    }
-
-    bindNewProductClick(handler) {
-        this.#$newProductButton.onclick = handler;
     }
 
     renderCurrentProduct(product) {

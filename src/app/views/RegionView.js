@@ -141,7 +141,7 @@ export class RegionView extends BaseView {
         const productName = $draggedElement.dataset.productName;
         this.#onProductDropHandler(productName, {xTarget, yTarget});
         $draggedElement.remove();
-        $targetClone.textContent = productName;
+        $targetClone.textContent = productName.substring(0, 5).toUpperCase();
         ev.currentTarget.replaceWith($targetClone);
     };
 }

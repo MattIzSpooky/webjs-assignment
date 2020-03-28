@@ -6,7 +6,7 @@ export class UnmanagedProductController extends Controller {
         return this._view.getView();
     }
 
-    constructor(region, newProductHandler) {
+    constructor(region) {
         super();
         this._view = new UnmanagedProductsView();
         this._model = region;
@@ -18,7 +18,6 @@ export class UnmanagedProductController extends Controller {
         }
 
         this._view.bindDropdownChange(this.#onDropdownChange);
-        this._view.bindNewProductClick(newProductHandler);
     }
 
     #onDropdownChange = (value) => {
