@@ -37,30 +37,6 @@ export class Region extends Storable {
         this.save();
     }
 
-    /**
-     * @param {Product} newProduct
-     */
-    addUnmanagedProduct(newProduct) {
-        if (this.#unmanagedProducts.some(product => product.getName() === newProduct.getName())) {
-            throw new Error('No duplicate entries allowed. There is already an unmanaged product with the same name');
-        }
-
-        if (this.#squares.some(square => {
-            const product = square.getProduct();
-            if (product) {
-                return product.getName() === newProduct.getName()
-            }
-
-            return false;
-        })) {
-            throw new Error('No duplicate entries allowed. Already exists in the region.');
-        }
-
-        this.#unmanagedProducts.push(newProduct);
-
-        this.save();
-    }
-
     swapSquares(square1, square2) {
         const square1Product = square1.getProduct();
         square1.setProduct(square2.getProduct());
