@@ -1,0 +1,19 @@
+.square {
+  height: 50px;
+  width: 50px;
+  max-height: 50px;
+  max-width: 50px;
+  background-color: teal;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 2px solid black;
+
+  text-align: center;
+
+  margin: 0.5rem;
+
+  &-obstruction {
+    background-color: red;
+  }
+}

@@ -1,8 +1,5 @@
-$color: tan;
-
-h3 {
-  background-color: $color;
-  user-select: none;
-}
-
+@import "square";
+@import "modal";
+@import "product";
+@import "wizard";
 @import '~bootstrap/scss/bootstrap';
