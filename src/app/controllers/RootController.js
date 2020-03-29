@@ -40,7 +40,7 @@ export class RootController extends Controller {
             case 'weather':
                 controller = new WeatherController();
                 break;
-            case 'products':
+            case 'new-product':
                 controller = new ProductWizardController();
                 break;
             case 'clothes':
@@ -69,7 +69,7 @@ export class RootController extends Controller {
     };
 
     #onClickProductsButton = () => {
-        this._changeView(ProductWizardController, 'Products');
+        this._changeView(ProductWizardController, 'New-Product');
     };
 
     /**
