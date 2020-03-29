@@ -69,7 +69,7 @@ export class RootController extends Controller {
     };
 
     #onClickProductsButton = () => {
-        this._changeView(ProductWizardController, 'New-Product');
+        this._changeView(ProductWizardController, 'Products');
     };
 
     /**

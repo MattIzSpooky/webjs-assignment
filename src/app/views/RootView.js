@@ -14,19 +14,19 @@ export class RootView extends BaseView {
         this.$root = this.createElement('div');
 
         this.#clothesRegionButton = this.createElement('button');
-        this.#clothesRegionButton.textContent = 'Clothes';
+        this.#clothesRegionButton.textContent = 'Kleding';
 
         this.#tierlantineRegionButton = this.createElement('button');
         this.#tierlantineRegionButton.textContent = 'Tierlantine';
 
         this.#decorationRegionButton = this.createElement('button');
-        this.#decorationRegionButton.textContent = 'Decoration';
+        this.#decorationRegionButton.textContent = 'Decoraties';
 
         this.#weatherButton = this.createElement('button');
         this.#weatherButton.textContent = 'Weather';
 
         this.#productsButton = this.createElement('button');
-        this.#productsButton.textContent = 'New Product';
+        this.#productsButton.textContent = 'Products';
 
         this.$root.append(this._createNavbar(this.#clothesRegionButton, this.#tierlantineRegionButton, this.#decorationRegionButton, this.#weatherButton, this.#productsButton));
 
