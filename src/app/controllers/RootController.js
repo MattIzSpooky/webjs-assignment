@@ -53,33 +53,38 @@ export class RootController extends Controller {
     }
 
     #onClickClothesRegion = () => {
-        this._changeView(new RegionController(new Region('clothes', (x, y) => y % 4 === 0 && x % 4 === 0)), 'Clothes');
+        this._changeView(RegionController, 'Clothes', new Region('clothes', (x, y) => y % 4 === 0 && x % 4 === 0));
     };
 
     #onClickTiertineRegion = () => {
-        this._changeView(new RegionController(new Region('tierlantine', (x, y) => y % 6 === 0 && x % 6 === 0)), 'Tierlantine');
+        this._changeView(RegionController, 'Tierlantine', new Region('tierlantine', (x, y) => y % 6 === 0 && x % 6 === 0));
     };
 
     #onClickDecorationButton = () => {
-        this._changeView(new RegionController(new Region('decoration', (x, y) => y % 3 === 0 || x % 4 === 0)), 'Decoration');
+        this._changeView(RegionController, 'Decoration', new Region('decoration', (x, y) => y % 3 === 0 || x % 4 === 0));
     };
 
     #onClickWeatherButton = () => {
-        this._changeView(new WeatherController(), 'Weather');
+        this._changeView(WeatherController, 'Weather');
     };
 
     #onClickProductsButton = () => {
-        this._changeView(new ProductWizardController(), 'Products');
+        this._changeView(ProductWizardController, 'Products');
     };
 
     /**
      * @param {Controller} controller
+     * @param {...*}  controllerArgs
      * @param {String} title
      * @private
      */
-    _changeView(controller, title) {
+    _changeView(controller, title, ...controllerArgs) {
+        if (location.pathname.includes(title.toLowerCase())) {
+            return;
+        }
+
         this.#current.destroy();
-        this.#current = controller;
+        this.#current = new controller(...controllerArgs);
         history.pushState(null, title, `/${title.toLowerCase()}`);
     }
 }

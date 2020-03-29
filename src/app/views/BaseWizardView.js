@@ -202,7 +202,7 @@ export class BaseWizardView extends BaseView {
     }
 
     bindOnFormSubmit() {
-        throw new Error('render() has to be implemented');
+        throw new Error('bindOnFormSubmit() has to be implemented');
     }
 
     bindTierlantinePageButton(handler) {
